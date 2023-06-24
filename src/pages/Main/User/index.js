@@ -75,6 +75,12 @@ const data = {
       width: 270,
     },
     {
+      label: "Last Login",
+      field: "lastLogin",
+      sort: "asc",
+      width: 270,
+    },
+    {
       label: "Manage Product",
       field: "manageProduct",
       sort: "asc",
@@ -99,6 +105,7 @@ const data = {
       fullName: "Piykarn nimmakulvirut",
       email: "piyakarn.nmk@gmail.com",
       phone: "0658528414",
+      lastLogin: "24/06/2023:18.30 PM",
       manageProduct: <ManageProductButton />,
       edit: <EditButton />,
       delete: <DeleteButton />,

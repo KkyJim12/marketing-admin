@@ -14,6 +14,7 @@ import CreateProduct from "../pages/Main/Product/create";
 import EditProduct from "../pages/Main/Product/edit";
 import CreatePage from "../pages/Main/Page/create";
 import EditPage from "../pages/Main/Page/edit";
+import SettingPage from "../pages/Main/Setting/index";
 
 const userRoutes = [
   {
@@ -75,6 +76,11 @@ const userRoutes = [
     path: "/page/:id/edit",
     exact: true,
     component: <EditPage />,
+  },
+  {
+    path: "/setting",
+    exact: true,
+    component: <SettingPage />,
   },
   { path: "*", component: <Navigate to="/user" /> },
 ];

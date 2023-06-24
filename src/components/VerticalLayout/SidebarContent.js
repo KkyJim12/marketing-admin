@@ -167,6 +167,12 @@ const SidebarContent = props => {
                 <span>{props.t("Page")}</span>
               </Link>
             </li>
+            <li>
+              <Link to="/setting">
+                <i className="uil-setting"></i>
+                <span>{props.t("Setting")}</span>
+              </Link>
+            </li>
           </ul>
         </div>
       </SimpleBar>
