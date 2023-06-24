@@ -23,7 +23,7 @@ const EditButton = () => {
   return (
     <Link
       className="btn btn-warning waves-effect waves-light btn-sm "
-      to="/user/1/edit"
+      to="/page/1/edit"
     >
       {t("Edit")}
     </Link>
