@@ -12,10 +12,11 @@ import {
   Input,
   Label,
   Button,
+  FormFeedback,
+  Alert,
 } from "reactstrap";
 
 // Redux
-import { Link } from "react-router-dom";
 import withRouter from "../../components/Common/withRouter";
 
 // import images
@@ -26,40 +27,55 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const [restError, setRestError] = useState("");
+
+  const resetLoginFormError = () => {
+    setEmailError("");
+    setPasswordError("");
+    setRestError("");
+  };
+
   const loginProcess = async e => {
     e.preventDefault();
+    resetLoginFormError();
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/guest/auths/admin-login`,
         { email: email, password: password }
       );
-      console.log(response);
     } catch (error) {
-      console.log(error.response);
+      const errors = error.response.data.errors;
+      if (error.response.status === 422) {
+        errors.map(error => {
+          if (error.key === "email") {
+            setEmailError(error.message);
+          } else if (error.key === "password") {
+            setPasswordError(error.message);
+          }
+        });
+      } else {
+        setRestError(error.response.data.message);
+      }
     }
   };
 
   return (
-    <React.Fragment>
+    <>
       <div className="account-pages my-5 pt-sm-5">
         <Container>
           <Row>
             <Col lg={12}>
-              <div className="text-center">
-                <Link to="/login" className="mb-5 d-block auth-logo">
-                  <img
-                    src={logo}
-                    alt=""
-                    height="22"
-                    className="logo logo-dark"
-                  />
-                  <img
-                    src={logolight}
-                    alt=""
-                    height="22"
-                    className="logo logo-light"
-                  />
-                </Link>
+              <div className="d-flex justify-content-center mb-4">
+                <img src={logo} alt="" height="22" className="logo logo-dark" />
+                <img
+                  src={logolight}
+                  alt=""
+                  height="22"
+                  className="logo logo-light"
+                />
               </div>
             </Col>
           </Row>
@@ -78,6 +94,7 @@ const Login = () => {
                       onSubmit={e => loginProcess(e)}
                       className="form-horizontal"
                     >
+                      {restError && <Alert color="danger">{restError}</Alert>}
                       <div className="mb-3">
                         <Label className="form-label">Email</Label>
                         <Input
@@ -88,14 +105,12 @@ const Login = () => {
                           value={email}
                           onChange={e => setEmail(e.target.value)}
                         />
+                        {emailError && (
+                          <small className="text-danger">{emailError}</small>
+                        )}
                       </div>
 
-                      <div className="mb-3">
-                        <div className="float-end">
-                          <Link to="/forgot-password" className="text-muted">
-                            Forgot password?
-                          </Link>
-                        </div>
+                      <div className="mb-2">
                         <Label className="form-label">Password</Label>
                         <Input
                           name="password"
@@ -104,6 +119,9 @@ const Login = () => {
                           value={password}
                           onChange={e => setPassword(e.target.value)}
                         />
+                        {passwordError && (
+                          <small className="text-danger">{passwordError}</small>
+                        )}
                       </div>
 
                       <div className="mt-3">
@@ -135,7 +153,7 @@ const Login = () => {
           </Row>
         </Container>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
