@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 import axios from "axios";
+import jwt_decode from "jwt-decode";
 
 import {
   Row,
@@ -12,9 +13,10 @@ import {
   Input,
   Label,
   Button,
-  FormFeedback,
   Alert,
 } from "reactstrap";
+
+import { useNavigate } from "react-router-dom";
 
 // Redux
 import withRouter from "../../components/Common/withRouter";
@@ -24,6 +26,8 @@ import logo from "../../assets/images/logo-full.png";
 import logolight from "../../assets/images/logo-full.png";
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -46,14 +50,24 @@ const Login = () => {
         `${process.env.REACT_APP_API_URL}/api/v1/guest/auths/admin-login`,
         { email: email, password: password }
       );
+
+      const data = response.data.data;
+      const decodedJWT = jwt_decode(data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("authUser", JSON.stringify(data.user));
+      localStorage.setItem("expiresIn", JSON.stringify(decodedJWT.exp));
+
+      navigate("/user");
     } catch (error) {
       const errors = error.response.data.errors;
       if (error.response.status === 422) {
         errors.map(error => {
           if (error.key === "email") {
-            setEmailError(error.message);
+            return setEmailError(error.message);
           } else if (error.key === "password") {
-            setPasswordError(error.message);
+            return setPasswordError(error.message);
+          } else {
+            return false;
           }
         });
       } else {

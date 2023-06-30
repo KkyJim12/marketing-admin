@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 import React from "react";
 
 import { Route, Routes } from "react-router-dom";
@@ -20,7 +20,6 @@ import "./assets/scss/theme.scss";
 
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper"
-
 
 // const firebaseConfig = {
 //   apiKey: process.env.REACT_APP_APIKEY,
@@ -55,42 +54,33 @@ const App = props => {
   return (
     <React.Fragment>
       <Routes>
-          {authRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={
-                <NonAuthLayout>
-                  {route.component}
-                </NonAuthLayout>
-              }
-              key={idx}
-              isAuthProtected={false}
-            />
-          ))}
+        {authRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={<NonAuthLayout>{route.component}</NonAuthLayout>}
+            key={idx}
+          />
+        ))}
 
-          {userRoutes.map((route, idx) => (
-            <Route
-              path={route.path}
-              element={
-                <Authmiddleware>
-                  <Layout>
-                    {route.component}
-                    </Layout>
-                </Authmiddleware>
-              }
-              key={idx}
-              isAuthProtected={true}
-              exact
-            />
-          ))}
-        
+        {userRoutes.map((route, idx) => (
+          <Route
+            path={route.path}
+            element={
+              <Authmiddleware>
+                <Layout>{route.component}</Layout>
+              </Authmiddleware>
+            }
+            key={idx}
+            exact
+          />
+        ))}
       </Routes>
     </React.Fragment>
   );
 };
 
 App.propTypes = {
-  layout: PropTypes.any
+  layout: PropTypes.any,
 };
 
 const mapStateToProps = state => {

@@ -82,7 +82,7 @@ const userRoutes = [
     exact: true,
     component: <SettingPage />,
   },
-  { path: "*", component: <Navigate to="/user" /> },
+  { path: "*", component: <Navigate to="/login" /> },
 ];
 
 const authRoutes = [{ path: "/login", component: <Login /> }];
