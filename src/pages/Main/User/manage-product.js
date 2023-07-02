@@ -131,7 +131,7 @@ const ManageProduct = () => {
                         Product
                       </Label>
                       <div>
-                        <select class="form-control">
+                        <select className="form-control">
                           <option>Select Product</option>
                           <option>ABC</option>
                         </select>
