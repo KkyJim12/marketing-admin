@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import "./datatables.scss";
 
 const User = () => {
+  document.title = " User | Marketing tool platform";
+  const { t } = useTranslation();
   const initData = {
     columns: [
       {
@@ -57,6 +59,10 @@ const User = () => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(initData);
+
+  useEffect(() => {
+    getUsers();
+  }, [isLoading]);
 
   const getUsers = async () => {
     try {
@@ -130,8 +136,7 @@ const User = () => {
       const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}`
       );
-      console.log(response);
-      getUsers();
+      setIsLoading(true);
     } catch (error) {
       console.log(error);
     }
@@ -151,12 +156,6 @@ const User = () => {
     );
   };
 
-  useEffect(() => {
-    getUsers();
-  }, []);
-
-  document.title = " User | Marketing tool platform";
-  const { t } = useTranslation();
   return (
     <React.Fragment>
       <div className="page-content">
