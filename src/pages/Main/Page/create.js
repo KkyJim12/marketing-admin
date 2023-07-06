@@ -75,6 +75,12 @@ const CreatePage = () => {
     setContent(editorState);
   };
 
+  const handleSortType = (e) => {
+    if (e.target.checked) {
+      setSortType(e.target.value);
+    }
+  };
+
   return (
     <>
       <div className="page-content">
@@ -120,8 +126,8 @@ const CreatePage = () => {
                                 name="sortType"
                                 id="upper"
                                 value="upper"
-                                onChange={() => setSortType("upper")}
-                                checked={sortType === "upper"}
+                                defaultChecked
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
@@ -139,8 +145,7 @@ const CreatePage = () => {
                                 name="sortType"
                                 id="middle"
                                 value="middle"
-                                onChange={() => setSortType("middle")}
-                                checked={sortType === "middle"}
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
@@ -158,8 +163,7 @@ const CreatePage = () => {
                                 name="sortType"
                                 id="lower"
                                 value="lower"
-                                onChange={() => setSortType("lower")}
-                                checked={sortType === "lower"}
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
@@ -195,12 +199,15 @@ const CreatePage = () => {
                           </>
                         ) : (
                           <>
-                            <select className="form-control">
-                              <option>Select Position</option>
-                              <option value="Between E-commerce and My Product">
+                            <select
+                              onChange={(e) => setSortValue(e.target.value)}
+                              className="form-control"
+                            >
+                              <option value={null}>Select Position</option>
+                              <option value={1}>
                                 Between E-commerce and My Product
                               </option>
-                              <option value="Between My Product and Order History">
+                              <option value={2}>
                                 Between My Product and Order History
                               </option>
                             </select>

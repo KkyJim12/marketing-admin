@@ -10,6 +10,7 @@ import {
   Container,
   Label,
   Form,
+  Alert,
 } from "reactstrap";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -25,7 +26,6 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 const EditPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [pageChoices, setPageChoices] = useState([]);
   const [name, setName] = useState("");
   const [sortType, setSortType] = useState("upper");
   const [sortValue, setSortValue] = useState("");
@@ -35,23 +35,6 @@ const EditPage = () => {
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
-
-  const resetEditPageError = () => {
-    setNameError("");
-    setSortTypeError("");
-    setSortValueError("");
-  };
-
-  const getPageChoices = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/choices/main`
-      );
-      setPageChoices(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const getPage = async () => {
     try {
@@ -76,12 +59,22 @@ const EditPage = () => {
     }
   };
 
+  useEffect(() => {
+    getPage(); // eslint-disable-next-line
+  }, []);
+
+  const resetEditPageError = () => {
+    setNameError("");
+    setSortTypeError("");
+    setSortValueError("");
+  };
+
   const editPage = async (e) => {
     e.preventDefault();
     resetEditPageError();
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
         {
           name: name,
@@ -118,10 +111,11 @@ const EditPage = () => {
     setContent(editorState);
   };
 
-  useEffect(() => {
-    getPageChoices();
-    getPage();
-  }, []);
+  const handleSortType = (e) => {
+    if (e.target.checked) {
+      setSortType(e.target.value);
+    }
+  };
 
   return (
     <>
@@ -133,6 +127,9 @@ const EditPage = () => {
                 <Card>
                   <CardBody>
                     <CardTitle>Edit Page</CardTitle>
+                    {restError && (
+                      <Alert className="text-danger">{restError}</Alert>
+                    )}
                     <Row className="gap-2">
                       <Col md={12}>
                         <Label
@@ -165,8 +162,8 @@ const EditPage = () => {
                                 name="sortType"
                                 id="upper"
                                 value="upper"
-                                onChange={() => setSortType("upper")}
-                                checked={sortType === "upper"}
+                                defaultChecked
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
@@ -184,8 +181,7 @@ const EditPage = () => {
                                 name="sortType"
                                 id="middle"
                                 value="middle"
-                                onChange={() => setSortType("middle")}
-                                checked={sortType === "middle"}
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
@@ -203,8 +199,7 @@ const EditPage = () => {
                                 name="sortType"
                                 id="lower"
                                 value="lower"
-                                onChange={() => setSortType("lower")}
-                                checked={sortType === "lower"}
+                                onChange={handleSortType}
                               />
                               <label
                                 className="form-check-label"
