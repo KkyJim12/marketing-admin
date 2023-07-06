@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Row,
@@ -13,25 +13,31 @@ import {
 } from "reactstrap";
 
 import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromHTML,
+  ContentState,
+} from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const CreatePage = () => {
+const EditPage = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
+  const [pageChoices, setPageChoices] = useState([]);
   const [name, setName] = useState("");
   const [sortType, setSortType] = useState("upper");
   const [sortValue, setSortValue] = useState("");
+  const [subMenuOf, setSubMenuOf] = useState(null);
   const [content, setContent] = useState(() => EditorState.createEmpty());
-
-  const [pageChoices, setPageChoices] = useState([]);
 
   const [nameError, setNameError] = useState("");
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
 
-  const resetCreatePageError = () => {
+  const resetEditPageError = () => {
     setNameError("");
     setSortTypeError("");
     setSortValueError("");
@@ -48,21 +54,45 @@ const CreatePage = () => {
     }
   };
 
-  useEffect(() => {
-    getPageChoices();
-  }, []);
+  const getPage = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}/edit`
+      );
+      const page = response.data.data;
+      setName(page.name);
+      setSortType(page.sortType);
+      setSortValue(page.sortValue);
 
-  const createPage = async (e) => {
+      if (page.pageId) {
+        setSubMenuOf(page.pageId);
+      }
+
+      const contentBlocks = convertFromHTML(JSON.parse(page.content));
+
+      const contentState = ContentState.createFromBlockArray(
+        contentBlocks.contentBlocks,
+        contentBlocks.entityMap
+      );
+
+      setContent(EditorState.createWithContent(contentState));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editPage = async (e) => {
     e.preventDefault();
-    resetCreatePageError();
+    resetEditPageError();
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
         {
           name: name,
           sortType: sortType,
           sortValue: sortValue,
+          subMenuOf: subMenuOf,
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
@@ -94,16 +124,21 @@ const CreatePage = () => {
     setContent(editorState);
   };
 
+  useEffect(() => {
+    getPageChoices();
+    getPage();
+  }, []);
+
   return (
     <>
       <div className="page-content">
         <Container fluid>
           <Row>
-            <Form onSubmit={(e) => createPage(e)}>
+            <Form onSubmit={(e) => editPage(e)}>
               <Col md={12}>
                 <Card>
                   <CardBody>
-                    <CardTitle>Add Page</CardTitle>
+                    <CardTitle>Edit Page</CardTitle>
                     <Row className="gap-2">
                       <Col md={12}>
                         <Label
@@ -212,11 +247,11 @@ const CreatePage = () => {
                         ) : (
                           <>
                             <select className="form-control">
-                              <option>Select Position</option>
-                              <option value="Between E-commerce and My Product">
+                              <option value={null}>Select Position</option>
+                              <option value={1}>
                                 Between E-commerce and My Product
                               </option>
-                              <option value="Between My Product and Order History">
+                              <option value={2}>
                                 Between My Product and Order History
                               </option>
                             </select>
@@ -227,6 +262,32 @@ const CreatePage = () => {
                             )}
                           </>
                         )}
+                      </Col>
+                      <Col md={12}>
+                        <Label
+                          htmlFor="example-text-input"
+                          className="col-md-2 col-form-Label"
+                        >
+                          Sub menu of
+                        </Label>
+                        <div>
+                          <select
+                            onChange={(e) => setSubMenuOf(e.target.value)}
+                            className="form-control"
+                          >
+                            <option value={null}>None</option>
+                            {pageChoices.map((pageChoice) => {
+                              return (
+                                <option
+                                  key={pageChoice.id}
+                                  value={pageChoice.id}
+                                >
+                                  {pageChoice.name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
                       </Col>
 
                       <Col md={12}>
@@ -243,7 +304,7 @@ const CreatePage = () => {
 
                       <Col className="gap-2 d-grid" md={12}>
                         <button className="btn btn-success mt-3" type="submit">
-                          Create Page
+                          Update Page
                         </button>
                       </Col>
                     </Row>
@@ -258,4 +319,4 @@ const CreatePage = () => {
   );
 };
 
-export default CreatePage;
+export default EditPage;

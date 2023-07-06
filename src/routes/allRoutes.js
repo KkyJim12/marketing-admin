@@ -14,6 +14,9 @@ import CreateProduct from "../pages/Main/Product/create";
 import EditProduct from "../pages/Main/Product/edit";
 import CreatePage from "../pages/Main/Page/create";
 import EditPage from "../pages/Main/Page/edit";
+import SubPage from "../pages/Main/SubPage/index";
+import CreateSubPage from "../pages/Main/SubPage/create";
+import EditSubPage from "../pages/Main/SubPage/edit";
 import SettingPage from "../pages/Main/Setting/index";
 
 const userRoutes = [
@@ -76,6 +79,22 @@ const userRoutes = [
     path: "/page/:id/edit",
     exact: true,
     component: <EditPage />,
+  },
+  ,
+  {
+    path: "/sub-page",
+    exact: true,
+    component: <SubPage />,
+  },
+  {
+    path: "/sub-page/create",
+    exact: true,
+    component: <CreateSubPage />,
+  },
+  {
+    path: "/sub-page/:id/edit",
+    exact: true,
+    component: <EditSubPage />,
   },
   {
     path: "/setting",

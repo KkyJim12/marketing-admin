@@ -29,7 +29,6 @@ const EditPage = () => {
   const [name, setName] = useState("");
   const [sortType, setSortType] = useState("upper");
   const [sortValue, setSortValue] = useState("");
-  const [subMenuOf, setSubMenuOf] = useState(null);
   const [content, setContent] = useState(() => EditorState.createEmpty());
 
   const [nameError, setNameError] = useState("");
@@ -64,10 +63,6 @@ const EditPage = () => {
       setSortType(page.sortType);
       setSortValue(page.sortValue);
 
-      if (page.pageId) {
-        setSubMenuOf(page.pageId);
-      }
-
       const contentBlocks = convertFromHTML(JSON.parse(page.content));
 
       const contentState = ContentState.createFromBlockArray(
@@ -92,7 +87,6 @@ const EditPage = () => {
           name: name,
           sortType: sortType,
           sortValue: sortValue,
-          subMenuOf: subMenuOf,
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
@@ -262,32 +256,6 @@ const EditPage = () => {
                             )}
                           </>
                         )}
-                      </Col>
-                      <Col md={12}>
-                        <Label
-                          htmlFor="example-text-input"
-                          className="col-md-2 col-form-Label"
-                        >
-                          Sub menu of
-                        </Label>
-                        <div>
-                          <select
-                            onChange={(e) => setSubMenuOf(e.target.value)}
-                            className="form-control"
-                          >
-                            <option value={null}>None</option>
-                            {pageChoices.map((pageChoice) => {
-                              return (
-                                <option
-                                  key={pageChoice.id}
-                                  value={pageChoice.id}
-                                >
-                                  {pageChoice.name}
-                                </option>
-                              );
-                            })}
-                          </select>
-                        </div>
                       </Col>
 
                       <Col md={12}>

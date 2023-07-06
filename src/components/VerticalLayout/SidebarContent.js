@@ -12,9 +12,9 @@ import { Link, useLocation } from "react-router-dom";
 //i18n
 import { withTranslation } from "react-i18next";
 
-const SidebarContent = props => {
+const SidebarContent = (props) => {
   // const ref = useRef();
-  const activateParentDropdown = useCallback(item => {
+  const activateParentDropdown = useCallback((item) => {
     item.classList.add("active");
     const parent = item.parentElement;
     const parent2El = parent.childNodes[1];
@@ -53,7 +53,7 @@ const SidebarContent = props => {
     return false;
   }, []);
 
-  const removeActivation = items => {
+  const removeActivation = (items) => {
     for (var i = 0; i < items.length; ++i) {
       var item = items[i];
       const parent = items[i].parentElement;
@@ -165,6 +165,12 @@ const SidebarContent = props => {
               <Link to="/page">
                 <i className="uil-comment-info"></i>
                 <span>{props.t("Page")}</span>
+              </Link>
+            </li>
+            <li>
+              <Link to="/sub-page">
+                <i className="uil-document-info"></i>
+                <span>{props.t("Sub Page")}</span>
               </Link>
             </li>
             <li>

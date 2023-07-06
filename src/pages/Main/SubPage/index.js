@@ -6,16 +6,16 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./datatables.scss";
 
-const Page = () => {
-  const AddPageButton = () => {
+const SubPage = () => {
+  const AddSubPageButton = () => {
     const { t } = useTranslation();
     return (
       <Link
-        to="/page/create"
+        to="/sub-page/create"
         className="btn btn-success waves-effect waves-light "
         type="button"
       >
-        {t("Add Page")}
+        {t("Add Sub Page")}
       </Link>
     );
   };
@@ -25,7 +25,7 @@ const Page = () => {
     return (
       <Link
         className="btn btn-warning waves-effect waves-light btn-sm "
-        to={"/page/" + props.id + "/edit"}
+        to={"/sub-page/" + props.id + "/edit"}
       >
         {t("Edit")}
       </Link>
@@ -37,7 +37,7 @@ const Page = () => {
       const response = await axios.delete(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`
       );
-      getPages();
+      getSubPages();
     } catch (error) {
       console.log(error);
     }
@@ -77,6 +77,12 @@ const Page = () => {
         width: 270,
       },
       {
+        label: "Sub Menu Of",
+        field: "subMenuOf",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Edit",
         field: "edit",
         sort: "asc",
@@ -98,10 +104,10 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(initData);
 
-  const getPages = async () => {
+  const getSubPages = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages`
       );
 
       const fetchData = response.data.data;
@@ -116,6 +122,12 @@ const Page = () => {
           delete: <DeleteButton id={fetchData[i].id} />,
         };
 
+        if (fetchData[i].pageId) {
+          newData.subMenuOf = fetchData[i].page.name;
+        } else {
+          newData.subMenuOf = "-";
+        }
+
         clonedData.rows.push(newData);
       }
 
@@ -127,7 +139,7 @@ const Page = () => {
   };
 
   useEffect(() => {
-    getPages();
+    getSubPages();
   }, []);
 
   return (
@@ -135,15 +147,15 @@ const Page = () => {
       <div className="page-content">
         <Container fluid>
           <div className="d-flex justify-content-between mb-2">
-            <h4>{t("Page")}</h4>
-            <AddPageButton />
+            <h4>{t("Sub Page")}</h4>
+            <AddSubPageButton />
           </div>
           <Row>
             <Col md={12}>
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of ordered products.
+                    List of ordered sub pages.
                   </CardSubtitle>
                   {isLoading === false && (
                     <MDBDataTable
@@ -163,4 +175,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SubPage;
