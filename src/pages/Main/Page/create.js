@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Row,
@@ -10,6 +10,7 @@ import {
   Container,
   Label,
   Form,
+  Alert,
 } from "reactstrap";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -24,8 +25,6 @@ const CreatePage = () => {
   const [sortValue, setSortValue] = useState("");
   const [content, setContent] = useState(() => EditorState.createEmpty());
 
-  const [pageChoices, setPageChoices] = useState([]);
-
   const [nameError, setNameError] = useState("");
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
@@ -37,37 +36,19 @@ const CreatePage = () => {
     setSortValueError("");
   };
 
-  const getPageChoices = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/choices/main`
-      );
-      setPageChoices(response.data.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getPageChoices();
-  }, []);
-
   const createPage = async (e) => {
     e.preventDefault();
     resetCreatePageError();
 
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
-        {
-          name: name,
-          sortType: sortType,
-          sortValue: sortValue,
-          content: JSON.stringify(
-            draftToHtml(convertToRaw(content.getCurrentContent()))
-          ),
-        }
-      );
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/admin/pages`, {
+        name: name,
+        sortType: sortType,
+        sortValue: sortValue,
+        content: JSON.stringify(
+          draftToHtml(convertToRaw(content.getCurrentContent()))
+        ),
+      });
 
       navigate("/page");
     } catch (error) {
@@ -104,6 +85,9 @@ const CreatePage = () => {
                 <Card>
                   <CardBody>
                     <CardTitle>Add Page</CardTitle>
+                    {restError && (
+                      <Alert className="text-danger">{restError}</Alert>
+                    )}
                     <Row className="gap-2">
                       <Col md={12}>
                         <Label

@@ -7,55 +7,8 @@ import { Link } from "react-router-dom";
 import "./datatables.scss";
 
 const Page = () => {
-  const AddPageButton = () => {
-    const { t } = useTranslation();
-    return (
-      <Link
-        to="/page/create"
-        className="btn btn-success waves-effect waves-light "
-        type="button"
-      >
-        {t("Add Page")}
-      </Link>
-    );
-  };
-
-  const EditButton = (props) => {
-    const { t } = useTranslation();
-    return (
-      <Link
-        className="btn btn-warning waves-effect waves-light btn-sm "
-        to={"/page/" + props.id + "/edit"}
-      >
-        {t("Edit")}
-      </Link>
-    );
-  };
-
-  const deletePage = async (id) => {
-    try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`
-      );
-      getPages();
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  const DeleteButton = (props) => {
-    const { t } = useTranslation();
-    return (
-      <button
-        onClick={() => deletePage(props.id)}
-        className="btn btn-danger waves-effect waves-light btn-sm"
-        type="button"
-      >
-        {t("Delete")}
-      </button>
-    );
-  };
-
+  document.title = " Page | Marketing tool platform";
+  const { t } = useTranslation();
   const initData = {
     columns: [
       {
@@ -92,11 +45,12 @@ const Page = () => {
     rows: [],
   };
 
-  document.title = " Page | Marketing tool platform";
-  const { t } = useTranslation();
-
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState(initData);
+
+  useEffect(() => {
+    getPages();
+  }, [isLoading]);
 
   const getPages = async () => {
     try {
@@ -126,9 +80,54 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    getPages();
-  }, []);
+  const AddPageButton = () => {
+    const { t } = useTranslation();
+    return (
+      <Link
+        to="/page/create"
+        className="btn btn-success waves-effect waves-light "
+        type="button"
+      >
+        {t("Add Page")}
+      </Link>
+    );
+  };
+
+  const EditButton = (props) => {
+    const { t } = useTranslation();
+    return (
+      <Link
+        className="btn btn-warning waves-effect waves-light btn-sm "
+        to={"/page/" + props.id + "/edit"}
+      >
+        {t("Edit")}
+      </Link>
+    );
+  };
+
+  const deletePage = async (id) => {
+    try {
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`
+      );
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const DeleteButton = (props) => {
+    const { t } = useTranslation();
+    return (
+      <button
+        onClick={() => deletePage(props.id)}
+        className="btn btn-danger waves-effect waves-light btn-sm"
+        type="button"
+      >
+        {t("Delete")}
+      </button>
+    );
+  };
 
   return (
     <React.Fragment>
@@ -143,7 +142,7 @@ const Page = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of ordered products.
+                    List of ordered pages.
                   </CardSubtitle>
                   {isLoading === false && (
                     <MDBDataTable
