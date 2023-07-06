@@ -34,10 +34,10 @@ const SubPage = () => {
 
   const deletePage = async (id) => {
     try {
-      const response = await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`
+      await axios.delete(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages/${id}`
       );
-      getSubPages();
+      setIsLoading(true);
     } catch (error) {
       console.log(error);
     }
@@ -63,12 +63,6 @@ const SubPage = () => {
         field: "pageName",
         sort: "asc",
         width: 150,
-      },
-      {
-        label: "Sort Type",
-        field: "sortType",
-        sort: "asc",
-        width: 270,
       },
       {
         label: "Sort Value",
@@ -116,8 +110,8 @@ const SubPage = () => {
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
           pageName: fetchData[i].name,
-          sortType: fetchData[i].sortType,
           sortValue: fetchData[i].sortValue,
+          subMenuOf: fetchData[i].pageId,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
@@ -139,8 +133,8 @@ const SubPage = () => {
   };
 
   useEffect(() => {
-    getSubPages();
-  }, []);
+    getSubPages(); // eslint-disable-next-line
+  }, [isLoading]);
 
   return (
     <React.Fragment>

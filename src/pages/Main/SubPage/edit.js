@@ -10,6 +10,7 @@ import {
   Container,
   Label,
   Form,
+  Alert,
 } from "reactstrap";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -86,7 +87,7 @@ const EditPage = () => {
     resetEditPageError();
 
     try {
-      const response = await axios.put(
+      await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
         {
           name: name,
@@ -125,8 +126,8 @@ const EditPage = () => {
   };
 
   useEffect(() => {
-    getPageChoices();
-    getPage();
+    getPageChoices(); // eslint-disable-next-line
+    getPage(); // eslint-disable-next-line
   }, []);
 
   return (
@@ -139,6 +140,9 @@ const EditPage = () => {
                 <Card>
                   <CardBody>
                     <CardTitle>Edit Page</CardTitle>
+                    {restError && (
+                      <Alert className="text-danger">{restError}</Alert>
+                    )}
                     <Row className="gap-2">
                       <Col md={12}>
                         <Label

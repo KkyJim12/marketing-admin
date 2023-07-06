@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
   Row,
@@ -10,6 +10,7 @@ import {
   Container,
   Label,
   Form,
+  Alert,
 } from "reactstrap";
 
 import { Editor } from "react-draft-wysiwyg";
@@ -47,7 +48,7 @@ const CreatePage = () => {
   };
 
   useEffect(() => {
-    getPageChoices();
+    getPageChoices(); // eslint-disable-next-line
   }, []);
 
   const createSubPage = async (e) => {
@@ -55,7 +56,7 @@ const CreatePage = () => {
     resetCreatePageError();
 
     try {
-      const response = await axios.post(
+      await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages`,
         {
           name: name,
@@ -67,7 +68,7 @@ const CreatePage = () => {
         }
       );
 
-      navigate("/page");
+      navigate("/sub-page");
     } catch (error) {
       const errors = error.response.data.errors;
       if (error.response.status === 422) {
@@ -100,6 +101,9 @@ const CreatePage = () => {
                 <Card>
                   <CardBody>
                     <CardTitle>Add Sub Page</CardTitle>
+                    {restError && (
+                      <Alert className="text-danger">{restError}</Alert>
+                    )}
                     <Row className="gap-2">
                       <Col md={12}>
                         <Label

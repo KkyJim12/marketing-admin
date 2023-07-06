@@ -49,7 +49,7 @@ const Page = () => {
   const [data, setData] = useState(initData);
 
   useEffect(() => {
-    getPages();
+    getPages(); // eslint-disable-next-line
   }, [isLoading]);
 
   const getPages = async () => {
