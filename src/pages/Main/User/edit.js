@@ -45,7 +45,7 @@ const EditUser = () => {
   };
 
   useEffect(() => {
-    getUser();
+    getUser(); // eslint-disable-next-line
   }, []);
 
   const showPassword = () => {

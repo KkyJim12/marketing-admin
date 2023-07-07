@@ -61,7 +61,7 @@ const User = () => {
   const [data, setData] = useState(initData);
 
   useEffect(() => {
-    getUsers();
+    getUsers(); // eslint-disable-next-line
   }, [isLoading]);
 
   const getUsers = async () => {
@@ -133,7 +133,7 @@ const User = () => {
 
   const deleteUser = async (id) => {
     try {
-      const response = await axios.delete(
+      await axios.delete(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}`
       );
       setIsLoading(true);

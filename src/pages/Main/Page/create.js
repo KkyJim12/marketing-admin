@@ -92,7 +92,7 @@ const CreatePage = () => {
                   <CardBody>
                     <CardTitle>Add Page</CardTitle>
                     {restError && (
-                      <Alert className="text-danger">{restError}</Alert>
+                      <Alert className="text-danger alert-danger">{restError}</Alert>
                     )}
                     <Row className="gap-2">
                       <Col md={12}>
