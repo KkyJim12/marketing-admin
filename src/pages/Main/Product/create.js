@@ -137,9 +137,7 @@ const CreateProduct = () => {
                             onChange={(e) => setType(e.target.value)}
                             className="form-control"
                           >
-                            <option value={null}>
-                              Please choose product type
-                            </option>
+                            <option value="">Please choose product type</option>
                             <option value="fab">Floating Action Button</option>
                           </select>
                           {typeError && (
