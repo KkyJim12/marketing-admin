@@ -49,6 +49,12 @@ const Product = () => {
         width: 270,
       },
       {
+        label: "Pre-built",
+        field: "preBuilt",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Edit",
         field: "edit",
         sort: "asc",
@@ -97,6 +103,7 @@ const Product = () => {
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
           price: fetchData[i].price,
+          preBuilt: <AddPreBuiltButton id={fetchData[i].id} />,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
@@ -109,8 +116,19 @@ const Product = () => {
     }
   };
 
+  const AddPreBuiltButton = (props) => {
+    return (
+      <Link
+        to={"/product/" + props.id + "/pre-built"}
+        className="btn btn-primary waves-effect waves-light btn-sm"
+        type="button"
+      >
+        {t("Pre-built")}
+      </Link>
+    );
+  };
+
   const AddProductButton = () => {
-    const { t } = useTranslation();
     return (
       <Link
         to="/product/create"
@@ -123,7 +141,6 @@ const Product = () => {
   };
 
   const EditButton = (props) => {
-    const { t } = useTranslation();
     return (
       <Link
         className="btn btn-warning waves-effect waves-light btn-sm "
@@ -135,7 +152,6 @@ const Product = () => {
   };
 
   const DeleteButton = (props) => {
-    const { t } = useTranslation();
     return (
       <button
         onClick={() => deleteProduct(props.id)}

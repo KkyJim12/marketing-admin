@@ -12,6 +12,7 @@ import ManageProduct from "../pages/Main/User/manage-product";
 import Page from "../pages/Main/Page/index";
 import CreateProduct from "../pages/Main/Product/create";
 import EditProduct from "../pages/Main/Product/edit";
+import AddPreBuiltProduct from "../pages/Main/Product/add-prebuilt";
 import CreatePage from "../pages/Main/Page/create";
 import EditPage from "../pages/Main/Page/edit";
 import SubPage from "../pages/Main/SubPage/index";
@@ -54,6 +55,11 @@ const userRoutes = [
     path: "/product/create",
     exact: true,
     component: <CreateProduct />,
+  },
+  {
+    path: "/product/:id/pre-built",
+    exact: true,
+    component: <AddPreBuiltProduct />,
   },
   {
     path: "/product/:id/edit",
