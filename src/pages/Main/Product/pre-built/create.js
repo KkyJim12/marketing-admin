@@ -8,6 +8,7 @@ import {
   Label,
   Input,
   Container,
+  Button,
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
@@ -86,7 +87,7 @@ const AddPrebuiltProduct = () => {
                   <span>Button Editor</span>
                 </CardTitle>
                 <Row>
-                  <Col md={2}>
+                  <Col md={3}>
                     <div>
                       <Label>Background color</Label>
                       <div className="d-flex gap-2">
@@ -130,7 +131,7 @@ const AddPrebuiltProduct = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col md={2}>
+                  <Col md={3}>
                     <div>
                       <Label>Text color</Label>
                       <div className="d-flex gap-2">
@@ -172,7 +173,7 @@ const AddPrebuiltProduct = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col md={2}>
+                  <Col md={3}>
                     <div>
                       <Label>Text (0/100)</Label>
                       <div className="d-flex gap-2">
@@ -186,7 +187,7 @@ const AddPrebuiltProduct = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col md={2}>
+                  <Col md={3}>
                     <div className="d-flex flex-column">
                       <Label>Size</Label>
                       <div
@@ -222,7 +223,7 @@ const AddPrebuiltProduct = () => {
 
             <Row>
               {/*  Position Editor */}
-              <Col className="pb-4" md={8}>
+              <Col className="pb-4" md={12}>
                 <Card className="h-100">
                   <CardBody>
                     <CardTitle className="h4 mb-4">
@@ -313,82 +314,9 @@ const AddPrebuiltProduct = () => {
               </Col>
 
               {/* End Position Editor */}
-
-              {/* Visibility Editor */}
-              <Col className="pb-4" md={4}>
-                <Card className="h-100">
-                  <CardBody>
-                    <CardTitle className="h4 mb-4">Visibility Editor</CardTitle>
-                    <Row>
-                      <span>Visibility</span>
-                    </Row>
-                    <Row>
-                      <Col md={3}>
-                        <div className="form-check">
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="defaultCheck1"
-                            checked={isPCChecked}
-                            onChange={(e) => setIsPCChecked(!isPCChecked)}
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="defaultCheck1"
-                          >
-                            PC
-                          </label>
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <div className="form-check">
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="defaultCheck2"
-                            value=""
-                            checked={isTabletChecked}
-                            onChange={(e) =>
-                              setIsTabletChecked(!isTabletChecked)
-                            }
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="defaultCheck2"
-                          >
-                            Tablet
-                          </label>
-                        </div>
-                      </Col>
-                      <Col md={3}>
-                        <div className="form-check">
-                          <Input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="defaultCheck2"
-                            value=""
-                            checked={isMobileChecked}
-                            onChange={(e) =>
-                              setIsMobileChecked(!isMobileChecked)
-                            }
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="defaultCheck2"
-                          >
-                            Mobile
-                          </label>
-                        </div>
-                      </Col>
-                    </Row>
-                  </CardBody>
-                </Card>
-              </Col>
-
-              {/* End Visibility Editor */}
             </Row>
             <Row>
-              <Col md={4}>
+              <Col md={6}>
                 {/* Icon Editor */}
                 <Card>
                   <CardBody>
@@ -472,6 +400,86 @@ const AddPrebuiltProduct = () => {
                   </CardBody>
                 </Card>
                 {/* End Icon Editor */}
+              </Col>
+              {/* Visibility Editor */}
+              <Col className="pb-4" md={6}>
+                <Card className="h-100">
+                  <CardBody>
+                    <CardTitle className="h4 mb-4">Visibility Editor</CardTitle>
+                    <Row>
+                      <span>Visibility</span>
+                    </Row>
+                    <Row>
+                      <Col md={3}>
+                        <div className="form-check">
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="defaultCheck1"
+                            checked={isPCChecked}
+                            onChange={(e) => setIsPCChecked(!isPCChecked)}
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="defaultCheck1"
+                          >
+                            PC
+                          </label>
+                        </div>
+                      </Col>
+                      <Col md={3}>
+                        <div className="form-check">
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="defaultCheck2"
+                            value=""
+                            checked={isTabletChecked}
+                            onChange={(e) =>
+                              setIsTabletChecked(!isTabletChecked)
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="defaultCheck2"
+                          >
+                            Tablet
+                          </label>
+                        </div>
+                      </Col>
+                      <Col md={3}>
+                        <div className="form-check">
+                          <Input
+                            className="form-check-input"
+                            type="checkbox"
+                            id="defaultCheck2"
+                            value=""
+                            checked={isMobileChecked}
+                            onChange={(e) =>
+                              setIsMobileChecked(!isMobileChecked)
+                            }
+                          />
+                          <label
+                            className="form-check-label"
+                            htmlFor="defaultCheck2"
+                          >
+                            Mobile
+                          </label>
+                        </div>
+                      </Col>
+                    </Row>
+                  </CardBody>
+                </Card>
+              </Col>
+              {/* End Visibility Editor */}
+            </Row>
+            <Row>
+              <Col md={12}>
+                <div className="d-grid gap-2">
+                  <Button type="button" className="btn btn-success">
+                    Create Pre-built Button
+                  </Button>
+                </div>
               </Col>
             </Row>
           </Col>
