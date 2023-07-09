@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import axios from "axios";
 import {
   Row,
   Col,
@@ -6,16 +8,140 @@ import {
   CardBody,
   CardTitle,
   Container,
-  Form,
+  Alert,
 } from "reactstrap";
 
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-import { useTranslation } from "react-i18next";
+
+import { Editor } from "react-draft-wysiwyg";
+import {
+  EditorState,
+  convertToRaw,
+  convertFromHTML,
+  ContentState,
+} from "draft-js";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const SettingPage = () => {
   const { t } = useTranslation();
+
+  const [eCommerceContent, setEcommerceContent] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const [myProductContent, setMyProductContent] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const [orderHistoryContent, setOrderHistoryContent] = useState(() =>
+    EditorState.createEmpty()
+  );
+
+  const [restError, setRestError] = useState("");
+  const [saveSuccess, setSaveSuccess] = useState("");
+
+  const onEcommerceEditorStateChange = (editorState) => {
+    setEcommerceContent(editorState);
+  };
+
+  const onMyProductEditorStateChange = (editorState) => {
+    setMyProductContent(editorState);
+  };
+
+  const onOrderHistoryEditorStateChange = (editorState) => {
+    setOrderHistoryContent(editorState);
+  };
+
+  const resetSaveContentError = () => {
+    setRestError("");
+  };
+
+  const getContents = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`
+      );
+
+      console.log(response);
+
+      const contents = response.data.data;
+
+      // Set e-commerce content
+      const eCommerceContentBlocks = convertFromHTML(
+        JSON.parse(contents.eCommercePage)
+      );
+
+      const eCommerceContentState = ContentState.createFromBlockArray(
+        eCommerceContentBlocks.contentBlocks,
+        eCommerceContentBlocks.entityMap
+      );
+
+      setEcommerceContent(EditorState.createWithContent(eCommerceContentState));
+
+      // Set my product content
+      const myProductContentBlocks = convertFromHTML(
+        JSON.parse(contents.myProductPage)
+      );
+
+      const myProductContentState = ContentState.createFromBlockArray(
+        myProductContentBlocks.contentBlocks,
+        myProductContentBlocks.entityMap
+      );
+
+      setMyProductContent(EditorState.createWithContent(myProductContentState));
+
+      // Set order history content
+      const orderHistoryContentBlock = convertFromHTML(
+        JSON.parse(contents.orderHistoryPage)
+      );
+
+      const orderHistoryContentState = ContentState.createFromBlockArray(
+        orderHistoryContentBlock.contentBlocks,
+        orderHistoryContentBlock.entityMap
+      );
+
+      setOrderHistoryContent(
+        EditorState.createWithContent(orderHistoryContentState)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getContents();
+  }, []);
+
+  const saveContent = async () => {
+    resetSaveContentError();
+
+    try {
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`,
+        {
+          eCommerceContent: JSON.stringify(
+            draftToHtml(convertToRaw(eCommerceContent.getCurrentContent()))
+          ),
+          myProductContent: JSON.stringify(
+            draftToHtml(convertToRaw(myProductContent.getCurrentContent()))
+          ),
+          orderHistoryContent: JSON.stringify(
+            draftToHtml(convertToRaw(orderHistoryContent.getCurrentContent()))
+          ),
+        }
+      );
+
+      setSaveSuccess("Save success");
+
+      setInterval(function () {
+        setSaveSuccess("");
+      }, 3000);
+    } catch (error) {
+      setRestError(error.response.data.message);
+    }
+  };
+
   return (
     <>
       <div className="page-content">
@@ -26,24 +152,30 @@ const SettingPage = () => {
               breadcrumbItem={t("Setting")}
             />
             <Col md={12}>
+              {saveSuccess && (
+                <Alert className="text-success alert-success">
+                  {saveSuccess}
+                </Alert>
+              )}
+              {restError && (
+                <Alert className="text-danger alert-danger">{restError}</Alert>
+              )}
+            </Col>
+            <Col md={12}>
               <Card>
                 <CardBody>
                   <CardTitle>E-commerce Bottom</CardTitle>
                   <Row className="gap-2">
                     <Col md={12}>
-                      <Form method="post" className="wysiwyg-custom">
+                      <div className="wysiwyg-custom">
                         <Editor
                           toolbarClassName="toolbarClassName"
                           wrapperClassName="wrapperClassName"
                           editorClassName="editorClassName"
+                          editorState={eCommerceContent}
+                          onEditorStateChange={onEcommerceEditorStateChange}
                         />
-                      </Form>
-                    </Col>
-
-                    <Col className="gap-2 d-grid" md={12}>
-                      <button className="btn btn-success mt-3" type="submit">
-                        Save
-                      </button>
+                      </div>
                     </Col>
                   </Row>
                 </CardBody>
@@ -55,19 +187,15 @@ const SettingPage = () => {
                   <CardTitle>My Product Bottom</CardTitle>
                   <Row className="gap-2">
                     <Col md={12}>
-                      <Form method="post" className="wysiwyg-custom">
+                      <div className="wysiwyg-custom">
                         <Editor
                           toolbarClassName="toolbarClassName"
                           wrapperClassName="wrapperClassName"
                           editorClassName="editorClassName"
+                          editorState={myProductContent}
+                          onEditorStateChange={onMyProductEditorStateChange}
                         />
-                      </Form>
-                    </Col>
-
-                    <Col className="gap-2 d-grid" md={12}>
-                      <button className="btn btn-success mt-3" type="submit">
-                        Save
-                      </button>
+                      </div>
                     </Col>
                   </Row>
                 </CardBody>
@@ -79,23 +207,30 @@ const SettingPage = () => {
                   <CardTitle>Order History Bottom</CardTitle>
                   <Row className="gap-2">
                     <Col md={12}>
-                      <Form method="post" className="wysiwyg-custom">
+                      <div className="wysiwyg-custom">
                         <Editor
                           toolbarClassName="toolbarClassName"
                           wrapperClassName="wrapperClassName"
                           editorClassName="editorClassName"
+                          editorState={orderHistoryContent}
+                          onEditorStateChange={onOrderHistoryEditorStateChange}
                         />
-                      </Form>
-                    </Col>
-
-                    <Col className="gap-2 d-grid" md={12}>
-                      <button className="btn btn-success mt-3" type="submit">
-                        Save
-                      </button>
+                      </div>
                     </Col>
                   </Row>
                 </CardBody>
               </Card>
+            </Col>
+          </Row>
+          <Row>
+            <Col className="gap-2 d-grid" md={12}>
+              <button
+                onClick={saveContent}
+                className="btn btn-success mt-3"
+                type="button"
+              >
+                Save
+              </button>
             </Col>
           </Row>
         </Container>
