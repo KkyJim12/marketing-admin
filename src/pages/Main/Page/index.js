@@ -150,6 +150,7 @@ const Page = () => {
                       bordered
                       data={data}
                       noBottomColumns
+
                     />
                   )}
                 </CardBody>

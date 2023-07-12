@@ -1,192 +1,272 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { MDBDataTable } from "mdbreact";
-import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
+import {
+  Row,
+  Col,
+  Card,
+  CardBody,
+  CardSubtitle,
+  Container,
+  Modal,
+} from "reactstrap";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import { useTranslation } from "react-i18next";
 import "./datatables.scss";
 
-const ViewButton = () => {
-  const { t } = useTranslation();
-  return (
-    <button
-      className="btn btn-info waves-effect waves-light btn-sm "
-      type="button"
-    >
-      {t("View")}
-    </button>
-  );
-};
-
-const AcceptButton = () => {
-  const { t } = useTranslation();
-  return (
-    <button
-      className="btn btn-success waves-effect waves-light btn-sm "
-      type="button"
-    >
-      {t("Accept")}
-    </button>
-  );
-};
-
-const DeclineButton = () => {
-  const { t } = useTranslation();
-  return (
-    <button
-      className="btn btn-warning waves-effect waves-light btn-sm "
-      type="button"
-    >
-      {t("Decline")}
-    </button>
-  );
-};
-
-const CancelButton = () => {
-  const { t } = useTranslation();
-  return (
-    <button
-      className="btn btn-danger waves-effect waves-light btn-sm"
-      type="button"
-    >
-      {t("Cancel")}
-    </button>
-  );
-};
-
-const data = {
-  columns: [
-    {
-      label: "Package Name",
-      field: "packageName",
-      sort: "asc",
-      width: 150,
-    },
-    {
-      label: "Type",
-      field: "type",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Domains",
-      field: "domains",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Duration",
-      field: "duration",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Order Date",
-      field: "orderDate",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Payment Date",
-      field: "paymentDate",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Status",
-      field: "status",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "View",
-      field: "view",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Accept",
-      field: "accept",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Decline",
-      field: "decline",
-      sort: "asc",
-      width: 270,
-    },
-    {
-      label: "Cancel",
-      field: "cancel",
-      sort: "asc",
-      width: 270,
-    },
-  ],
-  rows: [
-    {
-      id: 1,
-      packageName: "Floating action button #1",
-      type: "Floating action button",
-      domains: 3,
-      duration: 30,
-      orderDate: "15/06/2023",
-      paymentDate: "-",
-      status: "Wait for payment",
-      view: <ViewButton />,
-      accept: "",
-      decline: "",
-      cancel: <CancelButton />,
-    },
-
-    {
-      id: 2,
-      packageName: "Floating action button #1",
-      type: "Floating action button",
-      domains: 3,
-      duration: 30,
-      orderDate: "15/06/2023",
-      paymentDate: "-",
-      status: "Check Payment",
-      view: <ViewButton />,
-      accept: <AcceptButton />,
-      decline: <DeclineButton />,
-      cancel: <CancelButton />,
-    },
-    {
-      id: 3,
-      packageName: "Floating action button #1",
-      type: "Floating action button",
-      domains: 3,
-      duration: 30,
-      orderDate: "15/06/2023",
-      paymentDate: "-",
-      status: "Order Success",
-      view: <ViewButton />,
-      accept: "",
-      decline: "",
-      cancel: "",
-    },
-
-    {
-      id: 3,
-      packageName: "Floating action button #1",
-      type: "Floating action button",
-      domains: 3,
-      duration: 30,
-      orderDate: "15/06/2023",
-      paymentDate: "-",
-      status: "Order Cancel",
-      view: <ViewButton />,
-      accept: "",
-      decline: "",
-      cancel: "",
-    },
-  ],
-};
-
 const OrderHistory = () => {
   document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
+
+  const ViewButton = (props) => {
+    if (props.status === "Wait for checking" || props.status === "Success") {
+      return (
+        <button
+          onClick={() => toggleViewSlipModal(props.image)}
+          className="btn btn-info waves-effect waves-light btn-sm "
+          type="button"
+        >
+          {t("View")}
+        </button>
+      );
+    } else {
+      return <>-</>;
+    }
+  };
+
+  const AcceptButton = (props) => {
+    if (props.status === "Wait for checking") {
+      return (
+        <button
+          onClick={() => acceptOrder(props.id)}
+          className="btn btn-success waves-effect waves-light btn-sm "
+          type="button"
+        >
+          {t("Accept")}
+        </button>
+      );
+    } else {
+      return <>-</>;
+    }
+  };
+
+  const acceptOrder = async (id) => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/accept`
+      );
+
+      console.log(response);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const DeclineButton = (props) => {
+    if (props.status === "Wait for checking") {
+      return (
+        <button
+          onClick={() => declineOrder(props.id)}
+          className="btn btn-warning waves-effect waves-light btn-sm "
+          type="button"
+        >
+          {t("Decline")}
+        </button>
+      );
+    } else {
+      return <>-</>;
+    }
+  };
+
+  const declineOrder = async (id) => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/decline`
+      );
+
+      console.log(response);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const CancelButton = (props) => {
+    if (props.status === "Cancel" || props.status === "Success") {
+      return <>-</>;
+    } else {
+      return (
+        <button
+          onClick={() => cancelOrder(props.id)}
+          className="btn btn-danger waves-effect waves-light btn-sm"
+          type="button"
+        >
+          {t("Cancel")}
+        </button>
+      );
+    }
+  };
+
+  const cancelOrder = async (id) => {
+    try {
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/cancel`
+      );
+
+      console.log(response);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const initData = {
+    columns: [
+      {
+        label: "Order ID",
+        field: "id",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Package Name",
+        field: "name",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Type",
+        field: "type",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Price",
+        field: "price",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Domains",
+        field: "domains",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Duration",
+        field: "duration",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Order Date",
+        field: "orderDate",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Payment Date",
+        field: "paymentDate",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Status",
+        field: "status",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "View",
+        field: "view",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Accept",
+        field: "accept",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Decline",
+        field: "decline",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Cancel",
+        field: "cancel",
+        sort: "asc",
+        width: 270,
+      },
+    ],
+    rows: [],
+  };
+
+  const [data, setData] = useState(initData);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    getOrders(); // eslint-disable-next-line
+  }, [isLoading]);
+
+  const getOrders = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders`
+      );
+
+      console.log(response.data.data);
+
+      const fetchData = response.data.data;
+      const clonedData = initData;
+
+      for (let i = 0; i < fetchData.length; i++) {
+        const newData = {
+          id: fetchData[i].id,
+          name: fetchData[i].name,
+          type: fetchData[i].type,
+          domains: fetchData[i].domains,
+          duration: fetchData[i].duration,
+          price: fetchData[i].price,
+          orderDate: fetchData[i].createdAt,
+          paymentDate: "-",
+          status: fetchData[i].status,
+          view: (
+            <ViewButton
+              status={fetchData[i].status}
+              image={fetchData[i].image}
+            />
+          ),
+          accept: (
+            <AcceptButton id={fetchData[i].id} status={fetchData[i].status} />
+          ),
+          decline: (
+            <DeclineButton id={fetchData[i].id} status={fetchData[i].status} />
+          ),
+          cancel: (
+            <CancelButton id={fetchData[i].id} status={fetchData[i].status} />
+          ),
+        };
+        clonedData.rows.push(newData);
+      }
+      setData(clonedData);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [viewSlipModal, setViewSlipModal] = useState(false);
+  const [slipImage, setSlipImage] = useState("");
+  const toggleViewSlipModal = (imageUrl) => {
+    console.log(imageUrl);
+    setViewSlipModal(!viewSlipModal);
+    setSlipImage(imageUrl);
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -203,16 +283,57 @@ const OrderHistory = () => {
                     List of ordered products.
                   </CardSubtitle>
 
-                  <MDBDataTable
-                    responsive
-                    bordered
-                    data={data}
-                    noBottomColumns
-                  />
+                  {isLoading === false && (
+                    <MDBDataTable
+                      responsive
+                      bordered
+                      data={data}
+                      noBottomColumns
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>
           </Row>
+
+          <Modal
+            isOpen={viewSlipModal}
+            toggle={() => {
+              toggleViewSlipModal("");
+            }}
+          >
+            <div className="modal-header">
+              <h5 className="modal-title mt-0" id="myModalLabel">
+                View Slip
+              </h5>
+              <button
+                type="button"
+                onClick={() => {
+                  setViewSlipModal(false);
+                }}
+                className="close"
+                data-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-body">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <img
+                  style={{ width: 300, objectFit: "cover" }}
+                  src={slipImage}
+                  alt="slip"
+                />
+              </div>
+            </div>
+          </Modal>
         </Container>
       </div>
     </React.Fragment>

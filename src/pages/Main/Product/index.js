@@ -190,12 +190,14 @@ const Product = () => {
                     List of products.
                   </CardSubtitle>
 
-                  <MDBDataTable
-                    bordered
-                    responsive
-                    data={data}
-                    noBottomColumns
-                  />
+                  {isLoading === false && (
+                    <MDBDataTable
+                      responsive
+                      bordered
+                      data={data}
+                      noBottomColumns
+                    />
+                  )}
                 </CardBody>
               </Card>
             </Col>
