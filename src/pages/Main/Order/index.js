@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import moment from "moment";
 import { MDBDataTable } from "mdbreact";
 import {
   Row,
@@ -225,14 +226,24 @@ const OrderHistory = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id: fetchData[i].id,
+          id:
+            fetchData[i].id.substring(0, 4) +
+            "..." +
+            fetchData[i].id.substring(
+              fetchData[i].id.length - 5,
+              fetchData[i].id.length - 1
+            ),
           name: fetchData[i].name,
           type: fetchData[i].type,
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
           price: fetchData[i].price,
-          orderDate: fetchData[i].createdAt,
-          paymentDate: "-",
+          orderDate: moment(fetchData[i].createdAt).format(
+            "DD/MM/YYYY, h:mm a"
+          ),
+          paymentDate: fetchData[i].paymentDate
+            ? moment(fetchData[i].paymentDate).format("DD/MM/YYYY, h:mm a")
+            : "-",
           status: fetchData[i].status,
           view: (
             <ViewButton
