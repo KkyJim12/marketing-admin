@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Row,
   Col,
@@ -30,17 +30,27 @@ const AddPrebuiltProduct = () => {
   const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
   const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
 
-  const [marginTop, setMarginTop] = useState(0);
-  const [marginRight, setMarginRight] = useState(0);
-  const [marginBottom, setMarginBottom] = useState(0);
-  const [marginLeft, setMarginLeft] = useState(0);
-
-  const [preBuiltInput, setPreuiltInput] = useState("styled1");
   const [iconInput, setIconInput] = useState("font-awesome");
   const [isPCChecked, setIsPCChecked] = useState(true);
   const [isTabletChecked, setIsTabletChecked] = useState(true);
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
+
+  const handlePositionTop = (e) => {
+    setButtonPositionTop(parseInt(e.target.value));
+  };
+
+  const handlePositionRight = (e) => {
+    setButtonPositionRight(parseInt(e.target.value));
+  };
+
+  const handlePositionBottom = (e) => {
+    setButtonPositionBottom(parseInt(e.target.value));
+  };
+
+  const handlePositionLeft = (e) => {
+    setButtonPositionLeft(parseInt(e.target.value));
+  };
 
   const onDragBackgroundColor = (color) => {
     setBackgroundColor(color);
@@ -279,31 +289,51 @@ const AddPrebuiltProduct = () => {
                           <div className="d-flex gap-2">
                             <Input
                               type="number"
-                              className="form-control"
+                              className={
+                                buttonPositionTop === null
+                                  ? "form-control bg-light"
+                                  : "form-control"
+                              }
                               placeholder="Top"
-                              onChange={(e) => setMarginTop(e.target.value)}
-                              value={marginTop}
+                              onChange={handlePositionTop}
+                              value={buttonPositionTop}
+                              disabled={buttonPositionTop === null}
                             />
                             <Input
                               type="number"
-                              className="form-control"
+                              className={
+                                buttonPositionRight === null
+                                  ? "form-control bg-light"
+                                  : "form-control"
+                              }
                               placeholder="Right"
-                              onChange={(e) => setMarginRight(e.target.value)}
-                              value={marginRight}
+                              onChange={handlePositionRight}
+                              value={buttonPositionRight}
+                              disabled={buttonPositionRight === null}
                             />
                             <Input
                               type="number"
-                              className="form-control"
+                              className={
+                                buttonPositionBottom === null
+                                  ? "form-control bg-light"
+                                  : "form-control"
+                              }
                               placeholder="Bottom"
-                              onChange={(e) => setMarginBottom(e.target.value)}
-                              value={marginBottom}
+                              onChange={handlePositionBottom}
+                              value={buttonPositionBottom}
+                              disabled={buttonPositionBottom === null}
                             />
                             <Input
                               type="number"
-                              className="form-control"
+                              className={
+                                buttonPositionLeft === null
+                                  ? "form-control bg-light"
+                                  : "form-control"
+                              }
                               placeholder="Left"
-                              onChange={(e) => setMarginLeft(e.target.value)}
-                              value={marginLeft}
+                              onChange={handlePositionLeft}
+                              value={buttonPositionLeft}
+                              disabled={buttonPositionLeft === null}
                             />
                           </div>
                         </div>
@@ -485,16 +515,10 @@ const AddPrebuiltProduct = () => {
           </Col>
           <div
             style={{
-              top: buttonPositionTop ? buttonPositionTop + marginTop : null,
-              right: buttonPositionRight
-                ? buttonPositionRight + marginRight
-                : null,
-              bottom:
-                buttonPositionBottom > 0
-                  ? buttonPositionBottom + marginBottom
-                  : null,
-              left:
-                buttonPositionLeft > 0 ? buttonPositionLeft + marginLeft : null,
+              top: buttonPositionTop,
+              right: buttonPositionRight,
+              bottom: buttonPositionBottom,
+              left: buttonPositionLeft,
               position: "fixed",
               width: buttonSize,
               height: buttonSize,
