@@ -43,7 +43,7 @@ const EditProduct = () => {
   };
 
   useEffect(() => {
-    getProduct();
+    getProduct(); // eslint-disable-next-line
   }, []);
 
   const uploadImage = async (e) => {

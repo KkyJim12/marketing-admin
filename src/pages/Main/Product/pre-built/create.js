@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Row,
   Col,
@@ -7,7 +7,6 @@ import {
   CardTitle,
   Label,
   Input,
-  Container,
   Button,
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
@@ -185,10 +184,10 @@ const AddPrebuiltProduct = () => {
                   </Col>
                   <Col md={3}>
                     <div>
-                      <Label>Text (0/100)</Label>
+                      <Label>Text</Label>
                       <div className="d-flex gap-2">
                         <Input
-                          onChange={(e) => handleButtonText(e)}
+                          onChange={handleButtonText}
                           value={buttonText}
                           type="text"
                           className="form-control"
@@ -284,9 +283,9 @@ const AddPrebuiltProduct = () => {
                         </div>
                       </Col>
                       <Col md={6}>
-                        <div>
-                          <Label>Margin</Label>
-                          <div className="d-flex gap-2">
+                        <div className="d-flex gap-2">
+                          <div className="">
+                            <Label>Top</Label>
                             <Input
                               type="number"
                               className={
@@ -296,9 +295,16 @@ const AddPrebuiltProduct = () => {
                               }
                               placeholder="Top"
                               onChange={handlePositionTop}
-                              value={buttonPositionTop}
+                              value={
+                                buttonPositionTop === null
+                                  ? ""
+                                  : buttonPositionTop
+                              }
                               disabled={buttonPositionTop === null}
                             />
+                          </div>
+                          <div className="">
+                            <Label>Right</Label>
                             <Input
                               type="number"
                               className={
@@ -308,9 +314,16 @@ const AddPrebuiltProduct = () => {
                               }
                               placeholder="Right"
                               onChange={handlePositionRight}
-                              value={buttonPositionRight}
+                              value={
+                                buttonPositionRight === null
+                                  ? ""
+                                  : buttonPositionRight
+                              }
                               disabled={buttonPositionRight === null}
                             />
+                          </div>
+                          <div className="">
+                            <Label>Bottom</Label>
                             <Input
                               type="number"
                               className={
@@ -320,9 +333,16 @@ const AddPrebuiltProduct = () => {
                               }
                               placeholder="Bottom"
                               onChange={handlePositionBottom}
-                              value={buttonPositionBottom}
+                              value={
+                                buttonPositionBottom === null
+                                  ? ""
+                                  : buttonPositionBottom
+                              }
                               disabled={buttonPositionBottom === null}
                             />
+                          </div>
+                          <div className="">
+                            <Label>Left</Label>
                             <Input
                               type="number"
                               className={
@@ -332,7 +352,11 @@ const AddPrebuiltProduct = () => {
                               }
                               placeholder="Left"
                               onChange={handlePositionLeft}
-                              value={buttonPositionLeft}
+                              value={
+                                buttonPositionLeft === null
+                                  ? ""
+                                  : buttonPositionLeft
+                              }
                               disabled={buttonPositionLeft === null}
                             />
                           </div>
@@ -546,7 +570,10 @@ const AddPrebuiltProduct = () => {
               <div
                 style={{
                   position: "relative",
-                  bottom: 125,
+                  top: buttonPositionTop ? 10 : null,
+                  left: buttonPositionLeft ? 10 : null,
+                  bottom: buttonPositionBottom ? 450 : null,
+                  right: buttonPositionRight ? 280 : null,
                 }}
               >
                 <div
@@ -557,18 +584,34 @@ const AddPrebuiltProduct = () => {
                   <div
                     style={{
                       backgroundColor: "#3b82f6",
-                      paddingTop: 10,
-                      paddingBottom: 10,
+                      paddingTop: 15,
+                      paddingBottom: 15,
                       paddingRight: 20,
                       paddingLeft: 20,
                       color: "white",
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15,
+                      minWidth: 350,
+                      fontWeight: 600,
+                      fontSize: 20,
                     }}
                   >
                     {buttonText}
                   </div>
-                  <div>Email</div>
+                  <div
+                    style={{
+                      background: "rgb(125 211 252)",
+                      minHeight: 300,
+                      borderBottomLeftRadius: 15,
+                      borderBottomRightRadius: 15,
+                      color: "white",
+                      fontWeight: 500,
+                      fontSize: 16,
+                    }}
+                    className="py-3 px-4"
+                  >
+                    Email
+                  </div>
                 </div>
               </div>
             )}
