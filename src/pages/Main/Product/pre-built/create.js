@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import icons from "./free-icon.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Row,
   Col,
@@ -17,6 +21,8 @@ import ClickAwayListener from "react-click-away-listener";
 const AddPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
 
+  const { productId } = useParams();
+
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [textColorEnable, setTextColorEnable] = useState(false);
@@ -34,6 +40,48 @@ const AddPrebuiltProduct = () => {
   const [isTabletChecked, setIsTabletChecked] = useState(true);
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
+
+  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
+  const [selectedIconValue, setSelectedIconValue] = useState("apple");
+
+  const contacts = [
+    { id: 1, title: "Email", icon: "fast-mail-alt" },
+    { id: 2, title: "Phone", icon: "phone" },
+    { id: 3, title: "Line", icon: "line" },
+    { id: 4, title: "Facebook", icon: "facebook" },
+    { id: 5, title: "Youtube", icon: "youtube" },
+  ];
+
+  const createPrebuiltButton = async () => {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`,
+        {
+          backgroundColor: backgroundColor,
+          textColor: textColor,
+          textContent: buttonText,
+          size: buttonSize,
+          top: buttonPositionTop,
+          right: buttonPositionRight,
+          bottom: buttonPositionBottom,
+          left: buttonPositionLeft,
+          iconType: "custom",
+          icon: "",
+          visibleOnPC: isPCChecked,
+          visibleOnTablet: isTabletChecked,
+          visibleOnMobile: isMobileChecked,
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSelectedIcon = (e) => {
+    const splitIcon = e.target.value.split(" ");
+    setSelectedIconPrefix(splitIcon[0]);
+    setSelectedIconValue(splitIcon[1]);
+  };
 
   const handlePositionTop = (e) => {
     setButtonPositionTop(parseInt(e.target.value));
@@ -425,12 +473,19 @@ const AddPrebuiltProduct = () => {
                               className="form-select"
                               id="floatingSelectGrid"
                               aria-label="Floating label select example"
+                              onChange={handleSelectedIcon}
                             >
-                              <option>Open this select menu</option>
-                              <option value="1">Chat</option>
+                              {icons &&
+                                icons.data.map((icon, index) => {
+                                  return (
+                                    <option key={index} value={icon}>
+                                      {icon}
+                                    </option>
+                                  );
+                                })}
                             </select>
                             <label htmlFor="floatingSelectGrid">
-                              Select Icon
+                              Select Icon ({icons.data.length})
                             </label>
                           </div>
                         ) : (
@@ -530,7 +585,11 @@ const AddPrebuiltProduct = () => {
             <Row>
               <Col md={12}>
                 <div className="d-grid gap-2">
-                  <Button type="button" className="btn btn-success">
+                  <Button
+                    onClick={createPrebuiltButton}
+                    type="button"
+                    className="btn btn-success"
+                  >
                     Create Pre-built Button
                   </Button>
                 </div>
@@ -564,7 +623,11 @@ const AddPrebuiltProduct = () => {
                 fontSize: 32,
               }}
             >
-              <i className="uil-comment-info-alt"></i>
+              {selectedIconValue && (
+                <FontAwesomeIcon
+                  icon={[selectedIconPrefix, selectedIconValue]}
+                />
+              )}
             </button>
             {floatingActionButton && (
               <div
@@ -572,7 +635,9 @@ const AddPrebuiltProduct = () => {
                   position: "relative",
                   top: buttonPositionTop ? 10 : null,
                   left: buttonPositionLeft ? 10 : null,
-                  bottom: buttonPositionBottom ? 450 : null,
+                  bottom: buttonPositionBottom
+                    ? 450 + contacts.length * 10
+                    : null,
                   right: buttonPositionRight ? 280 : null,
                 }}
               >
@@ -601,16 +666,49 @@ const AddPrebuiltProduct = () => {
                   <div
                     style={{
                       background: "rgb(125 211 252)",
+                      cursor: "pointer",
                       minHeight: 300,
                       borderBottomLeftRadius: 15,
                       borderBottomRightRadius: 15,
                       color: "white",
                       fontWeight: 500,
-                      fontSize: 16,
                     }}
-                    className="py-3 px-4"
                   >
-                    Email
+                    {contacts.map((contact, index) => {
+                      return (
+                        <div
+                          key={contact.id}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            borderTop: "1px solid rgb(229 231 235)",
+                          }}
+                          className="py-3 px-4"
+                        >
+                          <i
+                            style={{
+                              fontSize: 24,
+                            }}
+                            className={"uil-" + contact.icon}
+                          ></i>
+                          <span
+                            style={{
+                              fontSize: 20,
+                            }}
+                          >
+                            {contact.title}
+                          </span>
+                          <i
+                            style={{
+                              fontSize: 24,
+                              marginLeft: "auto",
+                            }}
+                            className="uil-angle-right"
+                          ></i>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>

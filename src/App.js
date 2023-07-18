@@ -18,6 +18,8 @@ import NonAuthLayout from "./components/NonAuthLayout";
 // Import scss
 import "./assets/scss/theme.scss";
 
+import { library } from "@fortawesome/fontawesome-svg-core";
+import { fab } from "@fortawesome/free-brands-svg-icons";
 // Import Firebase Configuration file
 // import { initFirebaseBackend } from "./helpers/firebase_helper"
 
@@ -35,7 +37,9 @@ import "./assets/scss/theme.scss";
 // init firebase backend
 // initFirebaseBackend(firebaseConfig)
 
-const App = props => {
+library.add(fab);
+
+const App = (props) => {
   function getLayout() {
     let layoutCls = VerticalLayout;
 
@@ -83,7 +87,7 @@ App.propTypes = {
   layout: PropTypes.any,
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     layout: state.Layout,
   };

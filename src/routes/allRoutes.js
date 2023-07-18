@@ -58,12 +58,12 @@ const userRoutes = [
     component: <CreateProduct />,
   },
   {
-    path: "/product/:id/pre-built",
+    path: "/product/:productId/pre-built",
     exact: true,
     component: <PrebuiltProduct />,
   },
   {
-    path: "/product/:id/pre-built/create",
+    path: "/product/:productId/pre-built/create",
     exact: true,
     component: <AddPreBuiltProduct />,
   },
