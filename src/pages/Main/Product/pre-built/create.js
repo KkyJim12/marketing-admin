@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "./free-icon.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ClickAwayListener from "react-click-away-listener";
 import {
   Row,
   Col,
@@ -16,17 +17,18 @@ import {
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 
-import ClickAwayListener from "react-click-away-listener";
-
 const AddPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
 
   const { productId } = useParams();
+  const navigate = useNavigate();
 
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
+  const [bodyColorEnable, setBodyColorEnable] = useState(false);
   const [textColorEnable, setTextColorEnable] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
+  const [bodyColor, setBodyColor] = useState("#ffffff");
   const [textColor, setTextColor] = useState("#f5f5f5");
   const [buttonSize, setButtonSize] = useState(75);
 
@@ -41,8 +43,8 @@ const AddPrebuiltProduct = () => {
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
 
-  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
-  const [selectedIconValue, setSelectedIconValue] = useState("apple");
+  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
+  const [selectedIconValue, setSelectedIconValue] = useState("message");
 
   const contacts = [
     { id: 1, title: "Email", icon: "fast-mail-alt" },
@@ -58,6 +60,7 @@ const AddPrebuiltProduct = () => {
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`,
         {
           backgroundColor: backgroundColor,
+          bodyColor: bodyColor,
           textColor: textColor,
           textContent: buttonText,
           size: buttonSize,
@@ -65,13 +68,15 @@ const AddPrebuiltProduct = () => {
           right: buttonPositionRight,
           bottom: buttonPositionBottom,
           left: buttonPositionLeft,
-          iconType: "custom",
-          icon: "",
+          iconType: "font-awesome",
+          icon: selectedIconPrefix + " " + selectedIconValue,
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
         }
       );
+
+      navigate("/product/" + productId + "/pre-built");
     } catch (error) {
       console.log(error);
     }
@@ -102,6 +107,11 @@ const AddPrebuiltProduct = () => {
   const onDragBackgroundColor = (color) => {
     setBackgroundColor(color);
   };
+
+  const onDragBodyColor = (color) => {
+    setBodyColor(color);
+  };
+
   const onDragTextColor = (color) => {
     setTextColor(color);
   };
@@ -124,8 +134,19 @@ const AddPrebuiltProduct = () => {
   const closeBackgroundColorPicker = () => {
     setBackgroundColorEnable(false);
   };
+
+  const closeBodyColorPicker = () => {
+    setBodyColorEnable(false);
+  };
+
   const closeTextColorPicker = () => {
     setTextColorEnable(false);
+  };
+
+  const closeFloatingActionButton = () => {
+    if (floatingActionButton) {
+      setFloatingActionButton(false);
+    }
   };
 
   const openIconUploadInput = () => {
@@ -144,7 +165,7 @@ const AddPrebuiltProduct = () => {
                   <span>Button Editor</span>
                 </CardTitle>
                 <Row>
-                  <Col md={3}>
+                  <Col md={2}>
                     <div>
                       <Label>Background color</Label>
                       <div className="d-flex gap-2">
@@ -188,7 +209,49 @@ const AddPrebuiltProduct = () => {
                       </div>
                     </div>
                   </Col>
-                  <Col md={3}>
+                  <Col md={2}>
+                    <div>
+                      <Label>Body color</Label>
+                      <div className="d-flex gap-2">
+                        <Input
+                          type="text"
+                          className="colorpicker-default"
+                          value={bodyColor}
+                          readOnly
+                        />
+                        <div
+                          onClick={() => {
+                            setBodyColorEnable(!bodyColorEnable);
+                          }}
+                          className="btn"
+                          style={{
+                            backgroundColor: bodyColor,
+                            width: 40,
+                            height: 40,
+                          }}
+                        ></div>
+                        {bodyColorEnable ? (
+                          <ClickAwayListener onClickAway={closeBodyColorPicker}>
+                            <>
+                              <ColorPicker
+                                style={{
+                                  position: "absolute",
+                                  right: 10,
+                                  marginTop: "2.8rem",
+                                  zIndex: 500,
+                                }}
+                                saturationHeight={100}
+                                saturationWidth={100}
+                                value={bodyColor}
+                                onDrag={onDragBodyColor}
+                              />
+                            </>
+                          </ClickAwayListener>
+                        ) : null}
+                      </div>
+                    </div>
+                  </Col>
+                  <Col md={2}>
                     <div>
                       <Label>Text color</Label>
                       <div className="d-flex gap-2">
@@ -617,7 +680,7 @@ const AddPrebuiltProduct = () => {
                 borderRadius: "50%",
                 border: 0,
                 boxShadow:
-                  "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                 backgroundColor: backgroundColor,
                 color: textColor,
                 fontSize: 32,
@@ -648,12 +711,12 @@ const AddPrebuiltProduct = () => {
                 >
                   <div
                     style={{
-                      backgroundColor: "#3b82f6",
+                      backgroundColor: backgroundColor,
                       paddingTop: 15,
                       paddingBottom: 15,
                       paddingRight: 20,
                       paddingLeft: 20,
-                      color: "white",
+                      color: textColor,
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15,
                       minWidth: 350,
@@ -663,53 +726,58 @@ const AddPrebuiltProduct = () => {
                   >
                     {buttonText}
                   </div>
-                  <div
-                    style={{
-                      background: "rgb(125 211 252)",
-                      cursor: "pointer",
-                      minHeight: 300,
-                      borderBottomLeftRadius: 15,
-                      borderBottomRightRadius: 15,
-                      color: "white",
-                      fontWeight: 500,
-                    }}
-                  >
-                    {contacts.map((contact, index) => {
-                      return (
-                        <div
-                          key={contact.id}
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
-                            borderTop: "1px solid rgb(229 231 235)",
-                          }}
-                          className="py-3 px-4"
-                        >
-                          <i
+
+                  <ClickAwayListener onClickAway={closeFloatingActionButton}>
+                    <div
+                      style={{
+                        background: bodyColor,
+                        cursor: "pointer",
+                        minHeight: 300,
+                        borderBottomLeftRadius: 15,
+                        borderBottomRightRadius: 15,
+                        color: "rgb(75 85 99)",
+                        fontWeight: 500,
+                        boxShadow:
+                          "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                      }}
+                    >
+                      {contacts.map((contact, index) => {
+                        return (
+                          <div
+                            key={contact.id}
                             style={{
-                              fontSize: 24,
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 10,
+                              borderTop: "1px solid rgb(229 231 235)",
                             }}
-                            className={"uil-" + contact.icon}
-                          ></i>
-                          <span
-                            style={{
-                              fontSize: 20,
-                            }}
+                            className="py-3 px-4"
                           >
-                            {contact.title}
-                          </span>
-                          <i
-                            style={{
-                              fontSize: 24,
-                              marginLeft: "auto",
-                            }}
-                            className="uil-angle-right"
-                          ></i>
-                        </div>
-                      );
-                    })}
-                  </div>
+                            <i
+                              style={{
+                                fontSize: 24,
+                              }}
+                              className={"uil-" + contact.icon}
+                            ></i>
+                            <span
+                              style={{
+                                fontSize: 20,
+                              }}
+                            >
+                              {contact.title}
+                            </span>
+                            <i
+                              style={{
+                                fontSize: 24,
+                                marginLeft: "auto",
+                              }}
+                              className="uil-angle-right"
+                            ></i>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </ClickAwayListener>
                 </div>
               </div>
             )}

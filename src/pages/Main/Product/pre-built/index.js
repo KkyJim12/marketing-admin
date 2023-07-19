@@ -7,9 +7,9 @@ import { Link, useParams } from "react-router-dom";
 import "./datatables.scss";
 
 const PrebuiltProduct = () => {
-  document.title = " Product | Marketing tool platform";
+  document.title = " Pre-built Product | Marketing tool platform";
   const { t } = useTranslation();
-  const { id } = useParams();
+  const { productId } = useParams();
 
   const initData = {
     columns: [
@@ -119,7 +119,7 @@ const PrebuiltProduct = () => {
   const AddPreBuiltProductButton = () => {
     return (
       <Link
-        to={"/product/" + id + "/pre-built/create"}
+        to={"/product/" + productId + "/pre-built/create"}
         className="btn btn-primary waves-effect waves-light btn-sm"
         type="button"
       >

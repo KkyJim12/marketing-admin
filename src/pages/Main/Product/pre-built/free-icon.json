@@ -1,3 +1,9 @@
 {
-  "data": ["fab apple", "fab google", "fab microsoft"]
+  "data": [
+    "fas message",
+    "fas coffee",
+    "fab apple",
+    "fab google",
+    "fab microsoft"
+  ]
 }
