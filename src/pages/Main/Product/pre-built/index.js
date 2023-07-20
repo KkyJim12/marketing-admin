@@ -14,50 +14,68 @@ const PrebuiltProduct = () => {
   const initData = {
     columns: [
       {
-        label: "Image",
-        field: "image",
+        label: "ID",
+        field: "id",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Product Name",
-        field: "name",
+        label: "Background Color",
+        field: "backgroundColor",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Product Type",
-        field: "type",
+        label: "Body Color",
+        field: "bodyColor",
         sort: "asc",
         width: 150,
       },
       {
-        label: "Domains",
-        field: "domains",
+        label: "Text Color",
+        field: "textColor",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Size",
+        field: "size",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Duration",
-        field: "duration",
+        label: "Top",
+        field: "top",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Price",
-        field: "price",
+        label: "Right",
+        field: "right",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Pre-built",
-        field: "preBuilt",
+        label: "Bottom",
+        field: "bottom",
         sort: "asc",
         width: 270,
       },
       {
-        label: "Edit",
-        field: "edit",
+        label: "Left",
+        field: "left",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Icon Type",
+        field: "iconType",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Icon",
+        field: "icon",
         sort: "asc",
         width: 270,
       },
@@ -75,13 +93,13 @@ const PrebuiltProduct = () => {
   const [data, setData] = useState(initData);
 
   useEffect(() => {
-    getProducts(); // eslint-disable-next-line
+    getPrebuiltButtons(); // eslint-disable-next-line
   }, [isLoading]);
 
-  const getProducts = async () => {
+  const getPrebuiltButtons = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`
       );
 
       console.log(response.data.data);
@@ -91,20 +109,23 @@ const PrebuiltProduct = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id: fetchData[i].id,
-          image: (
-            <img
-              style={{ width: 50, height: 50, objectFit: "cover" }}
-              src={fetchData[i].image}
-              alt={fetchData[i].name}
-            />
-          ),
-          name: fetchData[i].name,
-          type: fetchData[i].type,
-          domains: fetchData[i].domains,
-          duration: fetchData[i].duration,
-          price: fetchData[i].price,
-          edit: <EditButton id={fetchData[i].id} />,
+          id:
+            fetchData[i].id.substring(0, 4) +
+            "..." +
+            fetchData[i].id.substring(
+              fetchData[i].id.length - 5,
+              fetchData[i].id.length - 1
+            ),
+          backgroundColor: fetchData[i].backgroundColor,
+          bodyColor: fetchData[i].bodyColor,
+          textColor: fetchData[i].textColor,
+          size: fetchData[i].size,
+          top: fetchData[i].top ? fetchData[i].top : "-",
+          right: fetchData[i].right ? fetchData[i].right : "-",
+          bottom: fetchData[i].bottom ? fetchData[i].bottom : "-",
+          left: fetchData[i].left ? fetchData[i].left : "-",
+          iconType: fetchData[i].iconType,
+          icon: fetchData[i].icon,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
         clonedData.rows.push(newData);
@@ -128,21 +149,10 @@ const PrebuiltProduct = () => {
     );
   };
 
-  const EditButton = (props) => {
-    return (
-      <Link
-        className="btn btn-warning waves-effect waves-light btn-sm "
-        to={"/product/" + props.id + "/edit"}
-      >
-        {t("Edit")}
-      </Link>
-    );
-  };
-
   const DeleteButton = (props) => {
     return (
       <button
-        onClick={() => deleteProduct(props.id)}
+        onClick={() => deletePrebuiltButton(props.id)}
         className="btn btn-danger waves-effect waves-light btn-sm"
         type="button"
       >
@@ -151,10 +161,10 @@ const PrebuiltProduct = () => {
     );
   };
 
-  const deleteProduct = async (id) => {
+  const deletePrebuiltButton = async (id) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons/${id}`
       );
       setIsLoading(true);
     } catch (error) {
