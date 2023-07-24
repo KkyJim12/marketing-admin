@@ -161,7 +161,7 @@ const EditProduct = () => {
                             className="form-control"
                           >
                             <option value="">Please choose product type</option>
-                            <option value="fab">Floating Action Button</option>
+                            <option value="Floating Action Button">Floating Action Button</option>
                           </select>
                           {typeError && (
                             <small className="text-danger">{typeError}</small>

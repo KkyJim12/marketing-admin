@@ -53,8 +53,13 @@ const OrderHistory = () => {
 
   const acceptOrder = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/accept`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/accept`,
+        "",
+        { headers }
       );
 
       console.log(response);
