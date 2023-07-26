@@ -76,7 +76,7 @@ const AddPrebuiltProduct = () => {
         }
       );
 
-      navigate("/product/" + productId + "/pre-built");
+      navigate("/product/" + productId + "/pre-built/button");
     } catch (error) {
       console.log(error);
     }

@@ -49,8 +49,14 @@ const Product = () => {
         width: 270,
       },
       {
-        label: "Pre-built",
-        field: "preBuilt",
+        label: "Pre-built Button",
+        field: "preBuiltButton",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Pre-built Contents",
+        field: "preBuiltContents",
         sort: "asc",
         width: 270,
       },
@@ -83,8 +89,6 @@ const Product = () => {
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products`
       );
 
-      console.log(response.data.data);
-
       const fetchData = response.data.data;
       const clonedData = initData;
 
@@ -103,7 +107,8 @@ const Product = () => {
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
           price: fetchData[i].price,
-          preBuilt: <AddPreBuiltButton id={fetchData[i].id} />,
+          preBuiltButton: <AddPreBuiltButton id={fetchData[i].id} />,
+          preBuiltContents: <AddPreBuiltContents id={fetchData[i].id} />,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
@@ -119,11 +124,23 @@ const Product = () => {
   const AddPreBuiltButton = (props) => {
     return (
       <Link
-        to={"/product/" + props.id + "/pre-built"}
+        to={"/product/" + props.id + "/pre-built/button"}
         className="btn btn-primary waves-effect waves-light btn-sm"
         type="button"
       >
-        {t("Pre-built")}
+        {t("Pre-built Button")}
+      </Link>
+    );
+  };
+
+  const AddPreBuiltContents = (props) => {
+    return (
+      <Link
+        to={"/product/" + props.id + "/pre-built/contents"}
+        className="btn btn-primary waves-effect waves-light btn-sm"
+        type="button"
+      >
+        {t("Pre-built Contents")}
       </Link>
     );
   };

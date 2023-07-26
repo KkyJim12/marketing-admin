@@ -6,8 +6,8 @@ import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router-dom";
 import "./datatables.scss";
 
-const PrebuiltProduct = () => {
-  document.title = " Pre-built Button | Marketing tool platform";
+const PrebuiltContents = () => {
+  document.title = " Pre-built Contents | Marketing tool platform";
   const { t } = useTranslation();
   const { productId } = useParams();
 
@@ -140,11 +140,11 @@ const PrebuiltProduct = () => {
   const AddPreBuiltProductButton = () => {
     return (
       <Link
-        to={"/product/" + productId + "/pre-built/button/create"}
+        to={"/product/" + productId + "/pre-built/contents/create"}
         className="btn btn-primary waves-effect waves-light btn-sm"
         type="button"
       >
-        {t("Add Pre-built")}
+        {t("Add Pre-built Contents")}
       </Link>
     );
   };
@@ -177,7 +177,7 @@ const PrebuiltProduct = () => {
       <div className="page-content">
         <Container fluid>
           <div className="d-flex justify-content-between mb-2">
-            <h4>{t("Pre-built Button")}</h4>
+            <h4>{t("Pre-built Contents")}</h4>
             <AddPreBuiltProductButton />
           </div>
           <Row>
@@ -185,7 +185,7 @@ const PrebuiltProduct = () => {
               <Card>
                 <CardBody>
                   <CardSubtitle className="mb-3">
-                    List of pre-built buttons.
+                    List of pre-built contents.
                   </CardSubtitle>
 
                   <MDBDataTable
@@ -204,4 +204,4 @@ const PrebuiltProduct = () => {
   );
 };
 
-export default PrebuiltProduct;
+export default PrebuiltContents;

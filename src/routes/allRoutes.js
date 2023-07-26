@@ -13,6 +13,8 @@ import Page from "../pages/Main/Page/index";
 import CreateProduct from "../pages/Main/Product/create";
 import EditProduct from "../pages/Main/Product/edit";
 import PrebuiltProduct from "../pages/Main/Product/pre-built/index";
+import PrebuiltContents from "../pages/Main/Product/pre-built/contents/index";
+import AddPrebuiltContents from "../pages/Main/Product/pre-built/contents/create";
 import AddPreBuiltProduct from "../pages/Main/Product/pre-built/create";
 import CreatePage from "../pages/Main/Page/create";
 import EditPage from "../pages/Main/Page/edit";
@@ -58,12 +60,22 @@ const userRoutes = [
     component: <CreateProduct />,
   },
   {
-    path: "/product/:productId/pre-built",
+    path: "/product/:productId/pre-built/button",
     exact: true,
     component: <PrebuiltProduct />,
   },
   {
-    path: "/product/:productId/pre-built/create",
+    path: "/product/:productId/pre-built/contents",
+    exact: true,
+    component: <PrebuiltContents />,
+  },
+  {
+    path: "/product/:productId/pre-built/contents/create",
+    exact: true,
+    component: <AddPrebuiltContents />,
+  },
+  {
+    path: "/product/:productId/pre-built/button/create",
     exact: true,
     component: <AddPreBuiltProduct />,
   },
