@@ -26,58 +26,28 @@ const PrebuiltContents = () => {
         width: 150,
       },
       {
-        label: "Body Color",
-        field: "bodyColor",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Text Color",
-        field: "textColor",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Size",
-        field: "size",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Top",
-        field: "top",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Right",
-        field: "right",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Bottom",
-        field: "bottom",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Left",
-        field: "left",
-        sort: "asc",
-        width: 270,
-      },
-      {
-        label: "Icon Type",
-        field: "iconType",
-        sort: "asc",
-        width: 270,
-      },
-      {
         label: "Icon",
         field: "icon",
         sort: "asc",
         width: 270,
+      },
+      {
+        label: "Text",
+        field: "textContent",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Description",
+        field: "description",
+        sort: "asc",
+        width: 150,
+      },
+      {
+        label: "Destination",
+        field: "destination",
+        sort: "asc",
+        width: 150,
       },
       {
         label: "Delete",
@@ -93,13 +63,13 @@ const PrebuiltContents = () => {
   const [data, setData] = useState(initData);
 
   useEffect(() => {
-    getPrebuiltButtons(); // eslint-disable-next-line
+    getPrebuiltContents(); // eslint-disable-next-line
   }, [isLoading]);
 
-  const getPrebuiltButtons = async () => {
+  const getPrebuiltContents = async () => {
     try {
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`
       );
 
       console.log(response.data.data);
@@ -117,14 +87,9 @@ const PrebuiltContents = () => {
               fetchData[i].id.length - 1
             ),
           backgroundColor: fetchData[i].backgroundColor,
-          bodyColor: fetchData[i].bodyColor,
-          textColor: fetchData[i].textColor,
-          size: fetchData[i].size,
-          top: fetchData[i].top ? fetchData[i].top : "-",
-          right: fetchData[i].right ? fetchData[i].right : "-",
-          bottom: fetchData[i].bottom ? fetchData[i].bottom : "-",
-          left: fetchData[i].left ? fetchData[i].left : "-",
-          iconType: fetchData[i].iconType,
+          textContent: fetchData[i].textContent,
+          description: fetchData[i].description,
+          destination: fetchData[i].destination,
           icon: fetchData[i].icon,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
@@ -164,7 +129,7 @@ const PrebuiltContents = () => {
   const deletePrebuiltButton = async (id) => {
     try {
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents/${id}`
       );
       setIsLoading(true);
     } catch (error) {

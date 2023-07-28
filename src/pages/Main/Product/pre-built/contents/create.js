@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
@@ -15,19 +15,23 @@ import {
   Button,
 } from "reactstrap";
 import { useTranslation } from "react-i18next";
-import { Link, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./datatables.scss";
 import ClickAwayListener from "react-click-away-listener";
 
 const AddPrebuiltContents = () => {
   document.title = " Pre-built Contents | Marketing tool platform";
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { productId } = useParams();
 
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
+  const [textContent, setTextContent] = useState("");
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [description, setDescription] = useState("");
+  const [destination, setDestination] = useState("");
 
   const closeBackgroundColorPicker = () => {
     setBackgroundColorEnable(false);
@@ -44,7 +48,24 @@ const AddPrebuiltContents = () => {
   };
 
   const createPrebuiltContent = async () => {
-    const response = await axios.post("");
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`,
+        {
+          backgroundColor: backgroundColor,
+          textContent: textContent,
+          icon: selectedIconPrefix + " " + selectedIconValue,
+          description: description,
+          destination: destination,
+        }
+      );
+
+      console.log(response);
+
+      navigate("/product/" + productId + "/pre-built/contents");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -131,6 +152,8 @@ const AddPrebuiltContents = () => {
                       <Input
                         className="form-control"
                         placeholder="Text"
+                        onChange={(e) => setTextContent(e.target.value)}
+                        value={textContent}
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -138,6 +161,8 @@ const AddPrebuiltContents = () => {
                       <Input
                         className="form-control"
                         placeholder="Description"
+                        onChange={(e) => setDescription(e.target.value)}
+                        value={description}
                       ></Input>
                     </Col>
                     <Col md={3}>
@@ -145,6 +170,8 @@ const AddPrebuiltContents = () => {
                       <Input
                         className="form-control"
                         placeholder="Destination"
+                        onChange={(e) => setDestination(e.target.value)}
+                        value={destination}
                       ></Input>
                     </Col>
                   </Row>
