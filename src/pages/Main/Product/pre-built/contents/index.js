@@ -68,8 +68,12 @@ const PrebuiltContents = () => {
 
   const getPrebuiltContents = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`,
+        { headers }
       );
 
       console.log(response.data.data);
@@ -128,8 +132,12 @@ const PrebuiltContents = () => {
 
   const deletePrebuiltButton = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {

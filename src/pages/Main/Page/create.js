@@ -41,14 +41,21 @@ const CreatePage = () => {
     resetCreatePageError();
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/v1/admin/pages`, {
-        name: name,
-        sortType: sortType,
-        sortValue: sortValue,
-        content: JSON.stringify(
-          draftToHtml(convertToRaw(content.getCurrentContent()))
-        ),
-      });
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
+        {
+          name: name,
+          sortType: sortType,
+          sortValue: sortValue,
+          content: JSON.stringify(
+            draftToHtml(convertToRaw(content.getCurrentContent()))
+          ),
+        },
+        { headers }
+      );
 
       navigate("/page");
     } catch (error) {
@@ -92,7 +99,9 @@ const CreatePage = () => {
                   <CardBody>
                     <CardTitle>Add Page</CardTitle>
                     {restError && (
-                      <Alert className="text-danger alert-danger">{restError}</Alert>
+                      <Alert className="text-danger alert-danger">
+                        {restError}
+                      </Alert>
                     )}
                     <Row className="gap-2">
                       <Col md={12}>

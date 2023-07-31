@@ -59,8 +59,12 @@ const SettingPage = () => {
 
   const getContents = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`,
+        { headers }
       );
 
       console.log(response);
@@ -117,6 +121,9 @@ const SettingPage = () => {
     resetSaveContentError();
 
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`,
         {
@@ -129,7 +136,8 @@ const SettingPage = () => {
           orderHistoryContent: JSON.stringify(
             draftToHtml(convertToRaw(orderHistoryContent.getCurrentContent()))
           ),
-        }
+        },
+        { headers }
       );
 
       setSaveSuccess("Save success");

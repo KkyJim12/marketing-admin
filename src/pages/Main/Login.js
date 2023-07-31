@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import jwt_decode from "jwt-decode";
 
@@ -27,6 +27,15 @@ import logolight from "../../assets/images/logo-full.png";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (
+      localStorage.getItem("authUser") ||
+      localStorage.getItem("accessToken")
+    ) {
+      navigate("/user");
+    }
+  }, []);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

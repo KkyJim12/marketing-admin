@@ -32,8 +32,12 @@ const EditUser = () => {
 
   const getUser = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}/edit`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}/edit`,
+        { headers }
       );
       const user = response.data.data;
       setFullName(user.fullName);
@@ -73,9 +77,13 @@ const EditUser = () => {
     e.preventDefault();
     resetEditUserError();
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}`,
-        { fullName: fullName, phone: phone, password: password }
+        { fullName: fullName, phone: phone, password: password },
+        { headers }
       );
       console.log(response);
 

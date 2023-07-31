@@ -34,8 +34,12 @@ const SubPage = () => {
 
   const deletePage = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {
@@ -100,8 +104,12 @@ const SubPage = () => {
 
   const getSubPages = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages`,
+        { headers }
       );
 
       const fetchData = response.data.data;

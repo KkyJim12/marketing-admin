@@ -38,8 +38,12 @@ const EditPage = () => {
 
   const getPage = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}/edit`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}/edit`,
+        { headers }
       );
       const page = response.data.data;
       setName(page.name);
@@ -74,6 +78,9 @@ const EditPage = () => {
     resetEditPageError();
 
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
         {
@@ -83,7 +90,8 @@ const EditPage = () => {
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
-        }
+        },
+        { headers }
       );
 
       navigate("/page");
@@ -128,7 +136,9 @@ const EditPage = () => {
                   <CardBody>
                     <CardTitle>Edit Page</CardTitle>
                     {restError && (
-                      <Alert className="text-danger alert-danger">{restError}</Alert>
+                      <Alert className="text-danger alert-danger">
+                        {restError}
+                      </Alert>
                     )}
                     <Row className="gap-2">
                       <Col md={12}>

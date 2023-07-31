@@ -38,8 +38,12 @@ const CreatePage = () => {
 
   const getPageChoices = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
+        { headers }
       );
       setPageChoices(response.data.data);
     } catch (error) {
@@ -56,6 +60,9 @@ const CreatePage = () => {
     resetCreatePageError();
 
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages`,
         {
@@ -65,7 +72,8 @@ const CreatePage = () => {
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
-        }
+        },
+        { headers }
       );
 
       navigate("/sub-page");

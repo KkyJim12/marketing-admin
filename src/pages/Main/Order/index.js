@@ -87,8 +87,12 @@ const OrderHistory = () => {
 
   const declineOrder = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/decline`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/decline`,
+        { headers }
       );
 
       console.log(response);
@@ -116,8 +120,12 @@ const OrderHistory = () => {
 
   const cancelOrder = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/cancel`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/cancel`,
+        { headers }
       );
 
       console.log(response);
@@ -220,8 +228,12 @@ const OrderHistory = () => {
 
   const getOrders = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/orders`,
+        { headers }
       );
 
       console.log(response.data.data);

@@ -54,8 +54,12 @@ const Page = () => {
 
   const getPages = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
+        { headers }
       );
 
       const fetchData = response.data.data;
@@ -107,8 +111,12 @@ const Page = () => {
 
   const deletePage = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {
@@ -150,7 +158,6 @@ const Page = () => {
                       bordered
                       data={data}
                       noBottomColumns
-
                     />
                   )}
                 </CardBody>

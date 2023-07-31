@@ -66,8 +66,12 @@ const User = () => {
 
   const getUsers = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/users`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users`,
+        { headers }
       );
 
       const fetchData = response.data.data;
@@ -133,8 +137,12 @@ const User = () => {
 
   const deleteUser = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {

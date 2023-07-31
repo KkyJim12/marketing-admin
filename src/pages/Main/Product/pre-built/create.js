@@ -56,6 +56,9 @@ const AddPrebuiltProduct = () => {
 
   const createPrebuiltButton = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`,
         {
@@ -73,7 +76,7 @@ const AddPrebuiltProduct = () => {
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
-        }
+        },{headers}
       );
 
       navigate("/product/" + productId + "/pre-built/button");

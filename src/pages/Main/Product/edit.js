@@ -48,11 +48,15 @@ const EditProduct = () => {
 
   const uploadImage = async (e) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const formData = new FormData();
       formData.append("image", e.target.files[0]);
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/images`,
-        formData
+        formData,
+        { headers }
       );
       setImageUrl(response.data.data);
     } catch (error) {
@@ -62,8 +66,12 @@ const EditProduct = () => {
 
   const getProduct = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}/edit`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}/edit`,
+        { headers }
       );
 
       const product = response.data.data;
@@ -83,6 +91,9 @@ const EditProduct = () => {
     e.preventDefault();
     resetEditProductError();
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}`,
         {
@@ -92,7 +103,8 @@ const EditProduct = () => {
           duration: duration,
           price: price,
           image: imageUrl,
-        }
+        },
+        { headers }
       );
 
       navigate("/product");
@@ -161,7 +173,9 @@ const EditProduct = () => {
                             className="form-control"
                           >
                             <option value="">Please choose product type</option>
-                            <option value="Floating Action Button">Floating Action Button</option>
+                            <option value="Floating Action Button">
+                              Floating Action Button
+                            </option>
                           </select>
                           {typeError && (
                             <small className="text-danger">{typeError}</small>

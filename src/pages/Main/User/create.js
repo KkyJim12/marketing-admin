@@ -54,9 +54,13 @@ const CreateUser = () => {
     e.preventDefault();
     resetCreateUserError();
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/users`,
-        { fullName: fullName, email: email, phone: phone, password: password }
+        { fullName: fullName, email: email, phone: phone, password: password },
+        { headers }
       );
       console.log(response);
 

@@ -85,8 +85,12 @@ const Product = () => {
 
   const getProducts = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products`,
+        { headers }
       );
 
       const fetchData = response.data.data;
@@ -182,8 +186,12 @@ const Product = () => {
 
   const deleteProduct = async (id) => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {
