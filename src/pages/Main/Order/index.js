@@ -92,6 +92,7 @@ const OrderHistory = () => {
       };
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/decline`,
+        {},
         { headers }
       );
 
@@ -125,6 +126,7 @@ const OrderHistory = () => {
       };
       const response = await axios.put(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/orders/${id}/cancel`,
+        {},
         { headers }
       );
 
