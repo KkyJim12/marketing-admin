@@ -36,7 +36,7 @@ const EditPage = () => {
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
-  const [selectedIcon, setSelectedIcon] = useState("fas message");
+  const [selectedIcon, setSelectedIcon] = useState("uil-chat");
 
   const handleSelectedIcon = (e) => {
     setSelectedIcon(e.target.value);
