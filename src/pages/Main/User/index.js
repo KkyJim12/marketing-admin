@@ -5,6 +5,7 @@ import { Row, Col, Card, CardBody, CardSubtitle, Container } from "reactstrap";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "./datatables.scss";
+import moment from "moment";
 
 const User = () => {
   document.title = " User | Marketing tool platform";
@@ -83,7 +84,9 @@ const User = () => {
           fullName: fetchData[i].fullName,
           email: fetchData[i].email,
           phone: fetchData[i].phone,
-          lastLogin: fetchData[i].lastLogin,
+          lastLogin: moment(fetchData[i].lastLogin).format(
+            "DD/MM/YYYY | h:mm a"
+          ),
           manageProduct: <ManageProductButton id={fetchData[i].id} />,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
