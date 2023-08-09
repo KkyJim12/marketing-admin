@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import {
   Row,
   Col,
@@ -14,12 +15,35 @@ import { MDBDataTable } from "mdbreact";
 import { useTranslation } from "react-i18next";
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
 import "./datatables.scss";
+import axios from "axios";
+import moment from "moment";
 
 const ManageProduct = () => {
   const { t } = useTranslation();
-  const RevokeButton = () => {
+  const { id } = useParams();
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const revokeProduct = async (userProductId) => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${userProductId}/revoke`,
+        {},
+        { headers }
+      );
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const RevokeButton = (props) => {
     return (
       <Button
+        onClick={() => revokeProduct(props.userProductId)}
         className="btn btn-danger waves-effect waves-light "
         type="button"
       >
@@ -28,8 +52,9 @@ const ManageProduct = () => {
     );
   };
 
-  const data = {
+  const initData = {
     columns: [
+      { label: "ID", field: "id", width: 150 },
       {
         label: "Package Name",
         field: "packageName",
@@ -73,18 +98,97 @@ const ManageProduct = () => {
         width: 270,
       },
     ],
-    rows: [
-      {
-        id: 1,
-        packageName: "Floating action button #1",
-        type: "Floating action button",
-        domains: 3,
-        duration: 30,
-        remainingDays: 15,
-        status: "In Progress",
-        revoke: <RevokeButton />,
-      },
-    ],
+    rows: [],
+  };
+
+  const [data, setData] = useState(initData);
+  const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState("");
+
+  useEffect(() => {
+    getUserProducts(); // eslint-disable-next-line
+    getProducts();
+  }, [isLoading]);
+
+  const getProducts = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products`,
+        { headers }
+      );
+
+      console.log(response);
+      setProducts(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserProducts = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.get(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}/manage-products`,
+        { headers }
+      );
+
+      console.log(response);
+
+      const fetchData = response.data.data;
+      const clonedData = initData;
+
+      for (let i = 0; i < fetchData.length; i++) {
+        const newData = {
+          id:
+            fetchData[i].id.substring(0, 4) +
+            "..." +
+            fetchData[i].id.substring(
+              fetchData[i].id.length - 5,
+              fetchData[i].id.length - 1
+            ),
+          packageName: fetchData[i].name,
+          type: fetchData[i].type,
+          domains: fetchData[i].domains,
+          duration: fetchData[i].duration,
+          remainingDays: moment(fetchData[i].endDate).fromNow(),
+          status: fetchData[i].status,
+          revoke:
+            fetchData[i].status === "On going" ? (
+              <RevokeButton userProductId={fetchData[i].id} />
+            ) : (
+              "-"
+            ),
+        };
+        clonedData.rows.push(newData);
+      }
+      setData(clonedData);
+      setIsLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const addProductToUser = async () => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${id}/add-product`,
+        { productId: selectedProduct },
+        { headers }
+      );
+
+      console.log(response);
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -121,7 +225,7 @@ const ManageProduct = () => {
             <Col md={6}>
               <Card>
                 <CardBody>
-                  <CardTitle>Add Product to user</CardTitle>
+                  <CardTitle>Add product to user</CardTitle>
                   <Row>
                     <Col md={12}>
                       <Label
@@ -131,15 +235,28 @@ const ManageProduct = () => {
                         Product
                       </Label>
                       <div>
-                        <select className="form-control">
-                          <option>Select Product</option>
-                          <option>ABC</option>
+                        <select
+                          onChange={(e) => setSelectedProduct(e.target.value)}
+                          className="form-control"
+                        >
+                          <option value="">Select Product</option>
+                          {products.map((product) => {
+                            return (
+                              <option value={product.id} key={product.id}>
+                                {product.name}
+                              </option>
+                            );
+                          })}
                         </select>
                       </div>
                     </Col>
 
                     <Col className="gap-2 d-grid" md={12}>
-                      <button className="btn btn-success mt-3" type="submit">
+                      <button
+                        onClick={addProductToUser}
+                        className="btn btn-success mt-3"
+                        type="button"
+                      >
                         Confirm
                       </button>
                     </Col>
