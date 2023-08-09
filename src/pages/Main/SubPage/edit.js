@@ -22,6 +22,7 @@ import {
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import icons from "./icons.json";
 
 const EditPage = () => {
   const { id } = useParams();
@@ -32,6 +33,7 @@ const EditPage = () => {
   const [sortValue, setSortValue] = useState("");
   const [subMenuOf, setSubMenuOf] = useState(null);
   const [content, setContent] = useState(() => EditorState.createEmpty());
+  const [selectedIcon, setSelectedIcon] = useState("fas message");
 
   const [nameError, setNameError] = useState("");
   const [sortTypeError, setSortTypeError] = useState("");
@@ -44,13 +46,17 @@ const EditPage = () => {
     setSortValueError("");
   };
 
+  const handleSelectedIcon = (e) => {
+    setSelectedIcon(e.target.value);
+  };
+
   const getPageChoices = async () => {
     try {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
       };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/choices/main`,
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages`,
         { headers }
       );
       setPageChoices(response.data.data);
@@ -61,13 +67,17 @@ const EditPage = () => {
 
   const getPage = async () => {
     try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
       const response = await axios.get(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}/edit`
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages/${id}/edit`,
+        { headers }
       );
       const page = response.data.data;
       setName(page.name);
-      setSortType(page.sortType);
       setSortValue(page.sortValue);
+      setSelectedIcon(page.icon);
 
       if (page.pageId) {
         setSubMenuOf(page.pageId);
@@ -95,12 +105,12 @@ const EditPage = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/sub-pages/${id}`,
         {
           name: name,
-          sortType: sortType,
           sortValue: sortValue,
           subMenuOf: subMenuOf,
+          icon: selectedIcon,
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
@@ -108,15 +118,13 @@ const EditPage = () => {
         { headers }
       );
 
-      navigate("/page");
+      navigate("/sub-page");
     } catch (error) {
       const errors = error.response.data.errors;
       if (error.response.status === 422) {
         errors.map((error) => {
           if (error.key === "name") {
             return setNameError(error.message);
-          } else if (error.key === "sortType") {
-            return setSortTypeError(error.message);
           } else if (error.key === "sortValue") {
             return setSortValueError(error.message);
           } else {
@@ -174,108 +182,26 @@ const EditPage = () => {
                           )}
                         </div>
                       </Col>
-                      <Col md={3}>
-                        <Label className="col-md-2 col-form-Label">Sort</Label>
-                        <div className="d-flex gap-2">
-                          <div className="vstack gap-2">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="sortType"
-                                id="upper"
-                                value="upper"
-                                onChange={() => setSortType("upper")}
-                                checked={sortType === "upper"}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="upper"
-                              >
-                                Upper
-                              </label>
-                            </div>
-                          </div>
-                          <div className="vstack gap-2">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="sortType"
-                                id="middle"
-                                value="middle"
-                                onChange={() => setSortType("middle")}
-                                checked={sortType === "middle"}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="middle"
-                              >
-                                Middle
-                              </label>
-                            </div>
-                          </div>
-                          <div className="vstack gap-2">
-                            <div className="form-check">
-                              <input
-                                className="form-check-input"
-                                type="radio"
-                                name="sortType"
-                                id="lower"
-                                value="lower"
-                                onChange={() => setSortType("lower")}
-                                checked={sortType === "lower"}
-                              />
-                              <label
-                                className="form-check-label"
-                                htmlFor="lower"
-                              >
-                                Lower
-                              </label>
-                            </div>
-                          </div>
-                        </div>
-                        {sortTypeError && (
-                          <small className="text-danger">{sortTypeError}</small>
-                        )}
-                      </Col>
-                      <Col className="mt-2" md={12}>
-                        {sortType === "upper" || sortType === "lower" ? (
-                          <>
-                            <div>
-                              <input
-                                className="form-control"
-                                type="text"
-                                placeholder="Sort"
-                                value={sortValue}
-                                onChange={(e) => setSortValue(e.target.value)}
-                              />
 
-                              {sortValueError && (
-                                <small className="text-danger">
-                                  {sortValueError}
-                                </small>
-                              )}
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <select className="form-control">
-                              <option value={null}>Select Position</option>
-                              <option value={1}>
-                                Between E-commerce and My Product
-                              </option>
-                              <option value={2}>
-                                Between My Product and Order History
-                              </option>
-                            </select>
-                            {sortValueError && (
-                              <small className="text-danger">
-                                {sortValueError}
-                              </small>
-                            )}
-                          </>
-                        )}
+                      <Col className="mt-2" md={12}>
+                        <div>
+                          <Label className="col-md-2 col-form-Label">
+                            Sort
+                          </Label>
+                          <input
+                            className="form-control"
+                            type="text"
+                            placeholder="Sort"
+                            value={sortValue}
+                            onChange={(e) => setSortValue(e.target.value)}
+                          />
+
+                          {sortValueError && (
+                            <small className="text-danger">
+                              {sortValueError}
+                            </small>
+                          )}
+                        </div>
                       </Col>
                       <Col md={12}>
                         <Label
@@ -288,6 +214,7 @@ const EditPage = () => {
                           <select
                             onChange={(e) => setSubMenuOf(e.target.value)}
                             className="form-control"
+                            value={subMenuOf}
                           >
                             <option value={null}>None</option>
                             {pageChoices.map((pageChoice) => {
@@ -301,6 +228,30 @@ const EditPage = () => {
                               );
                             })}
                           </select>
+                        </div>
+                      </Col>
+
+                      <Col md={12}>
+                        <div className="form-floating mb-3">
+                          <select
+                            className="form-select"
+                            id="floatingSelectGrid"
+                            aria-label="Floating label select example"
+                            onChange={handleSelectedIcon}
+                            value={selectedIcon}
+                          >
+                            {icons &&
+                              icons.data.map((icon, index) => {
+                                return (
+                                  <option key={index} value={icon}>
+                                    {icon}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                          <label htmlFor="floatingSelectGrid">
+                            Select Icon ({icons.data.length})
+                          </label>
                         </div>
                       </Col>
 

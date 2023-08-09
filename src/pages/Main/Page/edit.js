@@ -22,6 +22,7 @@ import {
 } from "draft-js";
 import draftToHtml from "draftjs-to-html";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import icons from "./icons.json";
 
 const EditPage = () => {
   const { id } = useParams();
@@ -35,6 +36,11 @@ const EditPage = () => {
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
+  const [selectedIcon, setSelectedIcon] = useState("fas message");
+
+  const handleSelectedIcon = (e) => {
+    setSelectedIcon(e.target.value);
+  };
 
   const getPage = async () => {
     try {
@@ -49,6 +55,7 @@ const EditPage = () => {
       setName(page.name);
       setSortType(page.sortType);
       setSortValue(page.sortValue);
+      setSelectedIcon(page.icon);
 
       const contentBlocks = convertFromHTML(JSON.parse(page.content));
 
@@ -82,11 +89,12 @@ const EditPage = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/subpages/${id}`,
         {
           name: name,
           sortType: sortType,
           sortValue: sortValue,
+          icon: selectedIcon,
           content: JSON.stringify(
             draftToHtml(convertToRaw(content.getCurrentContent()))
           ),
@@ -261,6 +269,30 @@ const EditPage = () => {
                             )}
                           </>
                         )}
+                      </Col>
+
+                      <Col md={12}>
+                        <div className="form-floating mb-3">
+                          <select
+                            className="form-select"
+                            id="floatingSelectGrid"
+                            aria-label="Floating label select example"
+                            onChange={handleSelectedIcon}
+                            value={selectedIcon}
+                          >
+                            {icons &&
+                              icons.data.map((icon, index) => {
+                                return (
+                                  <option key={index} value={icon}>
+                                    {icon}
+                                  </option>
+                                );
+                              })}
+                          </select>
+                          <label htmlFor="floatingSelectGrid">
+                            Select Icon ({icons.data.length})
+                          </label>
+                        </div>
                       </Col>
 
                       <Col md={12}>

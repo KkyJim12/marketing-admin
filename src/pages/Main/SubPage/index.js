@@ -81,6 +81,12 @@ const SubPage = () => {
         width: 270,
       },
       {
+        label: "Icon",
+        field: "icon",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Edit",
         field: "edit",
         sort: "asc",
@@ -120,6 +126,7 @@ const SubPage = () => {
           pageName: fetchData[i].name,
           sortValue: fetchData[i].sortValue,
           subMenuOf: fetchData[i].pageId,
+          icon: fetchData[i].icon,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };

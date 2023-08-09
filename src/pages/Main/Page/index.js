@@ -30,6 +30,12 @@ const Page = () => {
         width: 270,
       },
       {
+        label: "Icon",
+        field: "icon",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Edit",
         field: "edit",
         sort: "asc",
@@ -70,6 +76,7 @@ const Page = () => {
           pageName: fetchData[i].name,
           sortType: fetchData[i].sortType,
           sortValue: fetchData[i].sortValue,
+          icon: fetchData[i].icon,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
