@@ -792,7 +792,19 @@ const AddPrebuiltProduct = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
-                {buttonPositionRight && <h5>{buttonText}</h5>}
+                {buttonPositionRight && (
+                  <div
+                    className="px-3 py-2 d-flex justify-content-center align-items-center"
+                    style={{
+                      background: "white",
+                      borderRadius: 10,
+                      boxShadow:
+                        "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    }}
+                  >
+                    <h5>{buttonText}</h5>
+                  </div>
+                )}
                 <button
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
