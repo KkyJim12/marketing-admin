@@ -33,7 +33,7 @@ const AddPrebuiltProduct = () => {
   const [buttonSize, setButtonSize] = useState(75);
 
   const [buttonPositionTop, setButtonPositionTop] = useState(null);
-  const [buttonPositionRight, setButtonPositionRight] = useState(20);
+  const [buttonPositionRight, setButtonPositionRight] = useState(10);
   const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
   const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
 
@@ -45,6 +45,15 @@ const AddPrebuiltProduct = () => {
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
+
+  const buttonStyles = [
+    "Rounded Button",
+    "Rounded Button With Text",
+    "Long Rounded Button#1",
+    "Long Rounded Button#2",
+  ];
+  const [selectedButtonStyle, setSelectedButtonStyle] =
+    useState("Rounded Button");
 
   const contacts = [
     { id: 1, title: "Email", icon: "fast-mail-alt" },
@@ -76,7 +85,8 @@ const AddPrebuiltProduct = () => {
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
-        },{headers}
+        },
+        { headers }
       );
 
       navigate("/product/" + productId + "/pre-built/button");
@@ -160,6 +170,39 @@ const AddPrebuiltProduct = () => {
     <React.Fragment>
       <div className="page-content">
         <Row>
+          <Col md={12}>
+            <Card>
+              <CardBody>
+                <CardTitle className="h4 mb-4">
+                  <span>Button Styles</span>
+                </CardTitle>
+                <Row>
+                  {buttonStyles.map((buttonStyle) => {
+                    return (
+                      <Col md={2}>
+                        <div className="d-flex flex-column gap-2">
+                          <Label>{buttonStyle}</Label>
+                          <Button
+                            onClick={() => setSelectedButtonStyle(buttonStyle)}
+                            type="button"
+                            className={
+                              buttonStyle === selectedButtonStyle
+                                ? "btn btn-success"
+                                : "btn btn-info"
+                            }
+                          >
+                            {buttonStyle === selectedButtonStyle
+                              ? "Selected"
+                              : "Choose this style"}
+                          </Button>
+                        </div>
+                      </Col>
+                    );
+                  })}
+                </Row>
+              </CardBody>
+            </Card>
+          </Col>
           <Col md={12}>
             {/* Button Editor */}
             <Card>
@@ -371,7 +414,7 @@ const AddPrebuiltProduct = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleButtonPosition(20, 20, null, null)
+                                handleButtonPosition(20, 10, null, null)
                               }
                               className="btn btn-light"
                             >
@@ -387,7 +430,7 @@ const AddPrebuiltProduct = () => {
                             </button>
                             <button
                               onClick={() =>
-                                handleButtonPosition(null, 20, 20, null)
+                                handleButtonPosition(null, 10, 20, null)
                               }
                               className="btn btn-light"
                             >
@@ -674,37 +717,79 @@ const AddPrebuiltProduct = () => {
               zIndex: 99999,
             }}
           >
-            <button
-              onClick={(e) => setFloatingActionButton(!floatingActionButton)}
-              type="button"
-              style={{
-                width: buttonSize,
-                height: buttonSize,
-                borderRadius: "50%",
-                border: 0,
-                boxShadow:
-                  "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-                backgroundColor: backgroundColor,
-                color: textColor,
-                fontSize: 32,
-              }}
-            >
-              {selectedIconValue && (
-                <FontAwesomeIcon
-                  icon={[selectedIconPrefix, selectedIconValue]}
-                />
-              )}
-            </button>
+            {selectedButtonStyle === "Rounded Button" ? (
+              <div
+                style={{ float: "right" }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    borderRadius: "50%",
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize: 32,
+                  }}
+                >
+                  {selectedIconValue && (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                </button>
+              </div>
+            ) : (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                {buttonPositionRight && <h5>{buttonText}</h5>}
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    borderRadius: "50%",
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize: 32,
+                  }}
+                >
+                  {selectedIconValue && (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                </button>
+                {buttonPositionLeft && <h5>{buttonText}</h5>}
+              </div>
+            )}
             {floatingActionButton && (
               <div
                 style={{
                   position: "relative",
-                  top: buttonPositionTop ? 10 : null,
-                  left: buttonPositionLeft ? 10 : null,
+                  top: buttonPositionTop ? 90 : null,
+                  left: buttonPositionLeft ? 0 : null,
                   bottom: buttonPositionBottom
-                    ? 450 + contacts.length * 10
+                    ? 370 + contacts.length * 10
                     : null,
-                  right: buttonPositionRight ? 280 : null,
+                  right: buttonPositionRight ? 300 : null,
                 }}
               >
                 <div
@@ -722,9 +807,12 @@ const AddPrebuiltProduct = () => {
                       color: textColor,
                       borderTopLeftRadius: 15,
                       borderTopRightRadius: 15,
-                      minWidth: 350,
+                      width: 350,
                       fontWeight: 600,
                       fontSize: 20,
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
                     }}
                   >
                     {buttonText}
@@ -733,9 +821,13 @@ const AddPrebuiltProduct = () => {
                   <ClickAwayListener onClickAway={closeFloatingActionButton}>
                     <div
                       style={{
+                        marginRight: buttonPositionRight
+                          ? buttonPositionRight
+                          : null,
                         background: bodyColor,
                         cursor: "pointer",
                         minHeight: 300,
+                        width: "100%",
                         borderBottomLeftRadius: 15,
                         borderBottomRightRadius: 15,
                         color: "rgb(75 85 99)",
@@ -744,7 +836,7 @@ const AddPrebuiltProduct = () => {
                           "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                       }}
                     >
-                      {contacts.map((contact, index) => {
+                      {contacts.map((contact) => {
                         return (
                           <div
                             key={contact.id}
