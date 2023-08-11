@@ -166,6 +166,10 @@ const AddPrebuiltProduct = () => {
     document.getElementById("iconUploadInput").click();
   };
 
+  const selectButtonStyle = (buttonStyle) => {
+    setSelectedButtonStyle(buttonStyle);
+  };
+
   return (
     <React.Fragment>
       <div className="page-content">
@@ -183,7 +187,7 @@ const AddPrebuiltProduct = () => {
                         <div className="d-flex flex-column gap-2">
                           <Label>{buttonStyle}</Label>
                           <Button
-                            onClick={() => setSelectedButtonStyle(buttonStyle)}
+                            onClick={() => selectButtonStyle(buttonStyle)}
                             type="button"
                             className={
                               buttonStyle === selectedButtonStyle
@@ -746,10 +750,45 @@ const AddPrebuiltProduct = () => {
                   )}
                 </button>
               </div>
-            ) : (
+            ) : selectedButtonStyle === "Long Rounded Button#1" ? (
               <div
                 style={{
                   float: buttonPositionRight === null ? "left" : "right",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  className="d-flex justify-content-center align-items-center gap-3 px-4"
+                  style={{
+                    width: "100%",
+                    height: buttonSize,
+                    borderRadius: 9999,
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: backgroundColor,
+                    color: textColor,
+                    fontSize: 32,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {selectedIconValue && (
+                    <FontAwesomeIcon
+                      icon={[selectedIconPrefix, selectedIconValue]}
+                    />
+                  )}
+                  <h5 style={{ color: textColor }}>{buttonText}</h5>
+                </button>
+              </div>
+            ) : selectedButtonStyle === "Rounded Button With Text" ? (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                  whiteSpace: "nowrap",
                 }}
                 className="d-flex gap-2 align-items-center"
               >
@@ -778,6 +817,56 @@ const AddPrebuiltProduct = () => {
                   )}
                 </button>
                 {buttonPositionLeft && <h5>{buttonText}</h5>}
+              </div>
+            ) : (
+              <div
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                }}
+                className="d-flex gap-2 align-items-center"
+              >
+                <button
+                  onClick={(e) =>
+                    setFloatingActionButton(!floatingActionButton)
+                  }
+                  type="button"
+                  className="d-flex justify-content-center align-items-center gap-3 px-2"
+                  style={{
+                    width: "100%",
+                    height: buttonSize,
+                    borderRadius: 9999,
+                    border: 0,
+                    boxShadow:
+                      "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    backgroundColor: "white",
+                    color: textColor,
+                    fontSize: 32,
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  <h5
+                    style={{
+                      color: "#374151",
+                    }}
+                  >
+                    {buttonText}
+                  </h5>
+                  <div
+                    className="d-flex align-items-center justify-content-center"
+                    style={{
+                      background: backgroundColor,
+                      width: buttonSize * 0.9,
+                      height: buttonSize * 0.9,
+                      borderRadius: "50%",
+                    }}
+                  >
+                    {selectedIconValue && (
+                      <FontAwesomeIcon
+                        icon={[selectedIconPrefix, selectedIconValue]}
+                      />
+                    )}
+                  </div>
+                </button>
               </div>
             )}
             {floatingActionButton && (
