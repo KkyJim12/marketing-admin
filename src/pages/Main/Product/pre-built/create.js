@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "./free-icon.json";
@@ -43,6 +43,9 @@ const AddPrebuiltProduct = () => {
   const [isMobileChecked, setIsMobileChecked] = useState(true);
   const [floatingActionButton, setFloatingActionButton] = useState(false);
 
+  const [uploadedIcon, setUploadedIcon] = useState("");
+  const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
+
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
 
@@ -63,6 +66,29 @@ const AddPrebuiltProduct = () => {
     { id: 5, title: "Youtube", icon: "youtube" },
   ];
 
+  const handleUploadIcon = (e) => {
+    if (!e.target.files || e.target.files.length === 0) {
+      setUploadedIcon(undefined);
+      return;
+    }
+
+    // I've kept this example simple by using the first image instead of multiple
+    setUploadedIcon(e.target.files[0]);
+  };
+
+  useEffect(() => {
+    if (!uploadedIcon) {
+      setPreviewUploadedIcon(undefined);
+      return;
+    }
+    // create the preview
+    const objectUrl = URL.createObjectURL(uploadedIcon);
+    setPreviewUploadedIcon(objectUrl);
+
+    // free memory when ever this component is unmounted
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [uploadedIcon]);
+
   const createPrebuiltButton = async () => {
     try {
       const headers = {
@@ -71,6 +97,7 @@ const AddPrebuiltProduct = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`,
         {
+          buttonStyle: selectedButtonStyle,
           backgroundColor: backgroundColor,
           bodyColor: bodyColor,
           textColor: textColor,
@@ -546,7 +573,7 @@ const AddPrebuiltProduct = () => {
                               name="icon"
                               id="manual"
                               value="manual"
-                              onChange={(e) => setIconInput("font-awesome")}
+                              onClick={(e) => setIconInput("font-awesome")}
                               checked={iconInput === "font-awesome"}
                             />
                             <label
@@ -565,7 +592,7 @@ const AddPrebuiltProduct = () => {
                               name="icon"
                               id="upload"
                               value="upload"
-                              onChange={(e) => setIconInput("upload")}
+                              onClick={(e) => setIconInput("upload")}
                               checked={iconInput === "upload"}
                             />
                             <label
@@ -603,14 +630,23 @@ const AddPrebuiltProduct = () => {
                           </div>
                         ) : (
                           <div className="form-floating mb-3">
+                            {previewUploadedIcon && (
+                              <div className="d-flex justify-content-center mb-3">
+                                <img
+                                  style={{ height: 100 }}
+                                  src={previewUploadedIcon}
+                                />
+                              </div>
+                            )}
                             <button
-                              className="btn-rounded waves-effect waves-light btn btn-primary  w-100"
+                              className="btn-rounded waves-effect waves-light btn btn-primary w-100"
                               type="button"
                               onClick={openIconUploadInput}
                             >
                               Upload
                             </button>
                             <input
+                              onChange={handleUploadIcon}
                               id="iconUploadInput"
                               className="d-none"
                               type="file"
@@ -637,13 +673,13 @@ const AddPrebuiltProduct = () => {
                           <Input
                             className="form-check-input"
                             type="checkbox"
-                            id="defaultCheck1"
+                            id="visibleOnPC"
                             checked={isPCChecked}
-                            onChange={(e) => setIsPCChecked(!isPCChecked)}
+                            onClick={(e) => setIsPCChecked(!isPCChecked)}
                           />
                           <label
                             className="form-check-label"
-                            htmlFor="defaultCheck1"
+                            htmlFor="visibleOnPC"
                           >
                             PC
                           </label>
@@ -654,16 +690,16 @@ const AddPrebuiltProduct = () => {
                           <Input
                             className="form-check-input"
                             type="checkbox"
-                            id="defaultCheck2"
+                            id="visibleOnTablet"
                             value=""
                             checked={isTabletChecked}
-                            onChange={(e) =>
+                            onClick={(e) =>
                               setIsTabletChecked(!isTabletChecked)
                             }
                           />
                           <label
                             className="form-check-label"
-                            htmlFor="defaultCheck2"
+                            htmlFor="visibleOnTablet"
                           >
                             Tablet
                           </label>
@@ -674,16 +710,16 @@ const AddPrebuiltProduct = () => {
                           <Input
                             className="form-check-input"
                             type="checkbox"
-                            id="defaultCheck2"
+                            id="visibleOnMobile"
                             value=""
                             checked={isMobileChecked}
-                            onChange={(e) =>
+                            onClick={(e) =>
                               setIsMobileChecked(!isMobileChecked)
                             }
                           />
                           <label
                             className="form-check-label"
-                            htmlFor="defaultCheck2"
+                            htmlFor="visibleOnMobile"
                           >
                             Mobile
                           </label>
@@ -740,10 +776,22 @@ const AddPrebuiltProduct = () => {
                       "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     backgroundColor: backgroundColor,
                     color: textColor,
-                    fontSize: 32,
+                    fontSize:
+                      iconInput === "upload" && previewUploadedIcon ? "" : 32,
                   }}
+                  className={
+                    iconInput === "upload" && previewUploadedIcon ? "p-3" : ""
+                  }
                 >
-                  {selectedIconValue && (
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
                     <FontAwesomeIcon
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
