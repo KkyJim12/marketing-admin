@@ -805,8 +805,8 @@ const AddPrebuiltProduct = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: "100%",
-                        height: "100%",
+                        width: 35,
+                        height: 35,
                       }}
                       src={previewUploadedIcon}
                     />
@@ -843,7 +843,15 @@ const AddPrebuiltProduct = () => {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {selectedIconValue && (
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
                     <FontAwesomeIcon
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
@@ -886,10 +894,22 @@ const AddPrebuiltProduct = () => {
                       "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     backgroundColor: backgroundColor,
                     color: textColor,
-                    fontSize: 32,
+                    fontSize:
+                      iconInput === "upload" && previewUploadedIcon ? "" : 32,
                   }}
+                  className={
+                    iconInput === "upload" && previewUploadedIcon ? "p-3" : ""
+                  }
                 >
-                  {selectedIconValue && (
+                  {iconInput === "upload" && previewUploadedIcon ? (
+                    <img
+                      style={{
+                        width: 35,
+                        height: 35,
+                      }}
+                      src={previewUploadedIcon}
+                    />
+                  ) : (
                     <FontAwesomeIcon
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
@@ -939,7 +959,15 @@ const AddPrebuiltProduct = () => {
                       borderRadius: "50%",
                     }}
                   >
-                    {selectedIconValue && (
+                    {iconInput === "upload" && previewUploadedIcon ? (
+                      <img
+                        style={{
+                          width: 35,
+                          height: 35,
+                        }}
+                        src={previewUploadedIcon}
+                      />
+                    ) : (
                       <FontAwesomeIcon
                         icon={[selectedIconPrefix, selectedIconValue]}
                       />
