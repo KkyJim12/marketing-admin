@@ -129,7 +129,20 @@ const PrebuiltProduct = () => {
           bottom: fetchData[i].bottom ? fetchData[i].bottom : "-",
           left: fetchData[i].left ? fetchData[i].left : "-",
           iconType: fetchData[i].iconType,
-          icon: fetchData[i].icon,
+          icon:
+            fetchData[i].iconType === "upload" ? (
+              <img
+                style={{
+                  objectFit: "cover",
+                  width: 30,
+                  height: 30,
+                }}
+                src={fetchData[i].icon}
+                alt="icon"
+              />
+            ) : (
+              fetchData[i].icon
+            ),
           delete: <DeleteButton id={fetchData[i].id} />,
         };
         clonedData.rows.push(newData);
@@ -171,7 +184,8 @@ const PrebuiltProduct = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       await axios.delete(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons/${id}`,{headers}
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons/${id}`,
+        { headers }
       );
       setIsLoading(true);
     } catch (error) {

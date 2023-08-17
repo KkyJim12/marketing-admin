@@ -44,6 +44,7 @@ const AddPrebuiltProduct = () => {
   const [floatingActionButton, setFloatingActionButton] = useState(false);
 
   const [uploadedIcon, setUploadedIcon] = useState("");
+  const [uploadedIconUrl, setUploadedIconUrl] = useState("");
   const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
@@ -66,13 +67,28 @@ const AddPrebuiltProduct = () => {
     { id: 5, title: "Youtube", icon: "youtube" },
   ];
 
-  const handleUploadIcon = (e) => {
+  const handleUploadIcon = async (e) => {
     if (!e.target.files || e.target.files.length === 0) {
       setUploadedIcon(undefined);
       return;
     }
 
-    // I've kept this example simple by using the first image instead of multiple
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const formData = new FormData();
+      formData.append("image", e.target.files[0]);
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/images`,
+        formData,
+        { headers }
+      );
+      setUploadedIconUrl(response.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+
     setUploadedIcon(e.target.files[0]);
   };
 
@@ -107,8 +123,11 @@ const AddPrebuiltProduct = () => {
           right: buttonPositionRight,
           bottom: buttonPositionBottom,
           left: buttonPositionLeft,
-          iconType: "font-awesome",
-          icon: selectedIconPrefix + " " + selectedIconValue,
+          iconType: iconInput,
+          icon:
+            iconInput === "font-awesome"
+              ? selectedIconPrefix + " " + selectedIconValue
+              : uploadedIconUrl,
           visibleOnPC: isPCChecked,
           visibleOnTablet: isTabletChecked,
           visibleOnMobile: isMobileChecked,
