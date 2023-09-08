@@ -13,16 +13,13 @@ import {
   Alert,
 } from "reactstrap";
 
-import { Editor } from "react-draft-wysiwyg";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromHTML,
-  ContentState,
-} from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import icons from "./icons.json";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import ImageResize from "quill-image-resize-module-react";
+import Quill from "quill";
+Quill.register("modules/imageResize", ImageResize);
 
 const EditPage = () => {
   const { id } = useParams();
@@ -30,13 +27,40 @@ const EditPage = () => {
   const [name, setName] = useState("");
   const [sortType, setSortType] = useState("upper");
   const [sortValue, setSortValue] = useState("");
-  const [content, setContent] = useState(() => EditorState.createEmpty());
+  const [content, setContent] = useState("");
 
   const [nameError, setNameError] = useState("");
   const [sortTypeError, setSortTypeError] = useState("");
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("uil-chat");
+
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["link", "image"],
+      ["clean"], // remove formatting button
+    ],
+    imageResize: {
+      parchment: Quill.import("parchment"),
+      modules: ["Resize", "DisplaySize"],
+    },
+  };
 
   const handleSelectedIcon = (e) => {
     setSelectedIcon(e.target.value);
@@ -57,14 +81,7 @@ const EditPage = () => {
       setSortValue(page.sortValue);
       setSelectedIcon(page.icon);
 
-      const contentBlocks = convertFromHTML(JSON.parse(page.content));
-
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks.contentBlocks,
-        contentBlocks.entityMap
-      );
-
-      setContent(EditorState.createWithContent(contentState));
+      setContent(page.content);
     } catch (error) {
       console.log(error);
     }
@@ -89,15 +106,13 @@ const EditPage = () => {
         Authorization: localStorage.getItem("accessToken"),
       };
       await axios.put(
-        `${process.env.REACT_APP_API_URL}/api/v1/admin/subpages/${id}`,
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/pages/${id}`,
         {
           name: name,
           sortType: sortType,
           sortValue: sortValue,
           icon: selectedIcon,
-          content: JSON.stringify(
-            draftToHtml(convertToRaw(content.getCurrentContent()))
-          ),
+          content: content,
         },
         { headers }
       );
@@ -121,10 +136,6 @@ const EditPage = () => {
         setRestError(error.response.data.message);
       }
     }
-  };
-
-  const onEditorStateChange = (editorState) => {
-    setContent(editorState);
   };
 
   const handleSortType = (e) => {
@@ -295,18 +306,15 @@ const EditPage = () => {
                         </div>
                       </Col>
 
-                      <Col md={12}>
-                        <div className="wysiwyg-custom">
-                          <Editor
-                            toolbarClassName="toolbarClassName"
-                            wrapperClassName="wrapperClassName"
-                            editorClassName="editorClassName"
-                            editorState={content}
-                            onEditorStateChange={onEditorStateChange}
-                          />
-                        </div>
+                      <Col style={{ height: 700 }} md={12}>
+                        <ReactQuill
+                          style={{ height: "90%" }}
+                          modules={modules}
+                          theme="snow"
+                          value={content}
+                          onChange={setContent}
+                        />
                       </Col>
-
                       <Col className="gap-2 d-grid" md={12}>
                         <button className="btn btn-success mt-3" type="submit">
                           Update Page

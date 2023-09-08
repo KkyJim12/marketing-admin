@@ -10,51 +10,56 @@ import {
   Container,
   Alert,
 } from "reactstrap";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 
 import Breadcrumbs from "../../../components/Common/Breadcrumb";
-
-import { Editor } from "react-draft-wysiwyg";
-import {
-  EditorState,
-  convertToRaw,
-  convertFromHTML,
-  ContentState,
-} from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import ImageResize from "quill-image-resize-module-react";
+import Quill from "quill";
+Quill.register("modules/imageResize", ImageResize);
 
 const SettingPage = () => {
   const { t } = useTranslation();
+  const [value, setValue] = useState("");
 
-  const [eCommerceContent, setEcommerceContent] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [eCommerceContent, setEcommerceContent] = useState();
 
-  const [myProductContent, setMyProductContent] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [myProductContent, setMyProductContent] = useState();
 
-  const [orderHistoryContent, setOrderHistoryContent] = useState(() =>
-    EditorState.createEmpty()
-  );
+  const [orderHistoryContent, setOrderHistoryContent] = useState();
 
   const [restError, setRestError] = useState("");
   const [saveSuccess, setSaveSuccess] = useState("");
 
-  const onEcommerceEditorStateChange = (editorState) => {
-    setEcommerceContent(editorState);
-  };
-
-  const onMyProductEditorStateChange = (editorState) => {
-    setMyProductContent(editorState);
-  };
-
-  const onOrderHistoryEditorStateChange = (editorState) => {
-    setOrderHistoryContent(editorState);
-  };
-
   const resetSaveContentError = () => {
     setRestError("");
+  };
+
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["link", "image"],
+      ["clean"], // remove formatting button
+    ],
+    imageResize: {
+      parchment: Quill.import("parchment"),
+      modules: ["Resize", "DisplaySize"],
+    },
   };
 
   const getContents = async () => {
@@ -71,43 +76,9 @@ const SettingPage = () => {
 
       const contents = response.data.data;
 
-      // Set e-commerce content
-      const eCommerceContentBlocks = convertFromHTML(
-        JSON.parse(contents.eCommercePage)
-      );
-
-      const eCommerceContentState = ContentState.createFromBlockArray(
-        eCommerceContentBlocks.contentBlocks,
-        eCommerceContentBlocks.entityMap
-      );
-
-      setEcommerceContent(EditorState.createWithContent(eCommerceContentState));
-
-      // Set my product content
-      const myProductContentBlocks = convertFromHTML(
-        JSON.parse(contents.myProductPage)
-      );
-
-      const myProductContentState = ContentState.createFromBlockArray(
-        myProductContentBlocks.contentBlocks,
-        myProductContentBlocks.entityMap
-      );
-
-      setMyProductContent(EditorState.createWithContent(myProductContentState));
-
-      // Set order history content
-      const orderHistoryContentBlock = convertFromHTML(
-        JSON.parse(contents.orderHistoryPage)
-      );
-
-      const orderHistoryContentState = ContentState.createFromBlockArray(
-        orderHistoryContentBlock.contentBlocks,
-        orderHistoryContentBlock.entityMap
-      );
-
-      setOrderHistoryContent(
-        EditorState.createWithContent(orderHistoryContentState)
-      );
+      setEcommerceContent(contents.eCommercePage);
+      setMyProductContent(contents.myProductPage);
+      setOrderHistoryContent(contents.orderHistoryPage);
     } catch (error) {
       console.log(error);
     }
@@ -127,15 +98,9 @@ const SettingPage = () => {
       await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/settings`,
         {
-          eCommerceContent: JSON.stringify(
-            draftToHtml(convertToRaw(eCommerceContent.getCurrentContent()))
-          ),
-          myProductContent: JSON.stringify(
-            draftToHtml(convertToRaw(myProductContent.getCurrentContent()))
-          ),
-          orderHistoryContent: JSON.stringify(
-            draftToHtml(convertToRaw(orderHistoryContent.getCurrentContent()))
-          ),
+          eCommerceContent: eCommerceContent,
+          myProductContent: myProductContent,
+          orderHistoryContent: orderHistoryContent,
         },
         { headers }
       );
@@ -174,16 +139,14 @@ const SettingPage = () => {
                 <CardBody>
                   <CardTitle>E-commerce Bottom</CardTitle>
                   <Row className="gap-2">
-                    <Col md={12}>
-                      <div className="wysiwyg-custom">
-                        <Editor
-                          toolbarClassName="toolbarClassName"
-                          wrapperClassName="wrapperClassName"
-                          editorClassName="editorClassName"
-                          editorState={eCommerceContent}
-                          onEditorStateChange={onEcommerceEditorStateChange}
-                        />
-                      </div>
+                    <Col style={{ height: 300 }} md={12}>
+                      <ReactQuill
+                        style={{ height: "80%" }}
+                        modules={modules}
+                        theme="snow"
+                        value={eCommerceContent}
+                        onChange={setEcommerceContent}
+                      />
                     </Col>
                   </Row>
                 </CardBody>
@@ -194,16 +157,14 @@ const SettingPage = () => {
                 <CardBody>
                   <CardTitle>My Product Bottom</CardTitle>
                   <Row className="gap-2">
-                    <Col md={12}>
-                      <div className="wysiwyg-custom">
-                        <Editor
-                          toolbarClassName="toolbarClassName"
-                          wrapperClassName="wrapperClassName"
-                          editorClassName="editorClassName"
-                          editorState={myProductContent}
-                          onEditorStateChange={onMyProductEditorStateChange}
-                        />
-                      </div>
+                    <Col style={{ height: 300 }} md={12}>
+                      <ReactQuill
+                        style={{ height: "80%" }}
+                        modules={modules}
+                        theme="snow"
+                        value={myProductContent}
+                        onChange={setMyProductContent}
+                      />
                     </Col>
                   </Row>
                 </CardBody>
@@ -214,16 +175,14 @@ const SettingPage = () => {
                 <CardBody>
                   <CardTitle>Order History Bottom</CardTitle>
                   <Row className="gap-2">
-                    <Col md={12}>
-                      <div className="wysiwyg-custom">
-                        <Editor
-                          toolbarClassName="toolbarClassName"
-                          wrapperClassName="wrapperClassName"
-                          editorClassName="editorClassName"
-                          editorState={orderHistoryContent}
-                          onEditorStateChange={onOrderHistoryEditorStateChange}
-                        />
-                      </div>
+                    <Col style={{ height: 300 }} md={12}>
+                      <ReactQuill
+                        style={{ height: "80%" }}
+                        modules={modules}
+                        theme="snow"
+                        value={orderHistoryContent}
+                        onChange={setOrderHistoryContent}
+                      />
                     </Col>
                   </Row>
                 </CardBody>

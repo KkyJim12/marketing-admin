@@ -13,18 +13,21 @@ import {
   Alert,
 } from "reactstrap";
 
-import { Editor } from "react-draft-wysiwyg";
-import { EditorState, convertToRaw } from "draft-js";
-import draftToHtml from "draftjs-to-html";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import icons from "./icons.json";
+
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import ImageResize from "quill-image-resize-module-react";
+import Quill from "quill";
+Quill.register("modules/imageResize", ImageResize);
 
 const CreatePage = () => {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [sortValue, setSortValue] = useState("");
   const [mainPageId, setMainPageId] = useState(null);
-  const [content, setContent] = useState(() => EditorState.createEmpty());
+  const [content, setContent] = useState("");
 
   const [pageChoices, setPageChoices] = useState([]);
 
@@ -32,6 +35,32 @@ const CreatePage = () => {
   const [sortValueError, setSortValueError] = useState("");
   const [restError, setRestError] = useState("");
   const [selectedIcon, setSelectedIcon] = useState("fas message");
+  const modules = {
+    toolbar: [
+      ["bold", "italic", "underline", "strike"], // toggled buttons
+      ["blockquote", "code-block"],
+
+      [{ header: 1 }, { header: 2 }], // custom button values
+      [{ list: "ordered" }, { list: "bullet" }],
+      [{ script: "sub" }, { script: "super" }], // superscript/subscript
+      [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+      [{ direction: "rtl" }], // text direction
+
+      [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+      [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+      [{ font: [] }],
+      [{ align: [] }],
+
+      ["link", "image"],
+      ["clean"], // remove formatting button
+    ],
+    imageResize: {
+      parchment: Quill.import("parchment"),
+      modules: ["Resize", "DisplaySize"],
+    },
+  };
 
   const resetCreatePageError = () => {
     setNameError("");
@@ -78,9 +107,7 @@ const CreatePage = () => {
           sortValue: sortValue,
           mainPageId: mainPageId,
           icon: selectedIcon,
-          content: JSON.stringify(
-            draftToHtml(convertToRaw(content.getCurrentContent()))
-          ),
+          content: content,
         },
         { headers }
       );
@@ -217,18 +244,15 @@ const CreatePage = () => {
                         </div>
                       </Col>
 
-                      <Col md={12}>
-                        <div className="wysiwyg-custom">
-                          <Editor
-                            toolbarClassName="toolbarClassName"
-                            wrapperClassName="wrapperClassName"
-                            editorClassName="editorClassName"
-                            editorState={content}
-                            onEditorStateChange={onEditorStateChange}
-                          />
-                        </div>
+                      <Col style={{ height: 700 }} md={12}>
+                        <ReactQuill
+                          style={{ height: "90%" }}
+                          modules={modules}
+                          theme="snow"
+                          value={content}
+                          onChange={setContent}
+                        />
                       </Col>
-
                       <Col className="gap-2 d-grid" md={12}>
                         <button className="btn btn-success mt-3" type="submit">
                           Create Sub Page
