@@ -25,20 +25,20 @@ const AddPrebuiltContents = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
 
-  const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
-  const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
+  const [textColorEnable, setTextColorEnable] = useState(false);
+  const [textColor, setTextColor] = useState("#343a40");
   const [textContent, setTextContent] = useState("");
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
   const [description, setDescription] = useState("");
   const [destination, setDestination] = useState("");
 
-  const closeBackgroundColorPicker = () => {
-    setBackgroundColorEnable(false);
+  const closeTextColorPicker = () => {
+    setTextColorEnable(false);
   };
 
-  const onDragBackgroundColor = (color) => {
-    setBackgroundColor(color);
+  const onDragTextColor = (color) => {
+    setTextColor(color);
   };
 
   const handleSelectedIcon = (e) => {
@@ -55,7 +55,7 @@ const AddPrebuiltContents = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`,
         {
-          backgroundColor: backgroundColor,
+          textColor: textColor,
           textContent: textContent,
           icon: selectedIconPrefix + " " + selectedIconValue,
           description: description,
@@ -91,28 +91,28 @@ const AddPrebuiltContents = () => {
                   <Row>
                     <Col md={2}>
                       <div>
-                        <Label>Background color</Label>
+                        <Label>Text color</Label>
                         <div className="d-flex gap-2">
                           <Input
                             type="text"
                             className="colorpicker-default"
-                            value={backgroundColor}
+                            value={textColor}
                             readOnly
                           />
                           <div
                             onClick={() => {
-                              setBackgroundColorEnable(!backgroundColorEnable);
+                              setTextColorEnable(!textColorEnable);
                             }}
                             className="btn"
                             style={{
-                              backgroundColor: backgroundColor,
+                              backgroundColor: textColor,
                               width: 40,
                               height: 40,
                             }}
                           ></div>
-                          {backgroundColorEnable ? (
+                          {textColorEnable ? (
                             <ClickAwayListener
-                              onClickAway={closeBackgroundColorPicker}
+                              onClickAway={closeTextColorPicker}
                             >
                               <>
                                 <ColorPicker
@@ -124,8 +124,8 @@ const AddPrebuiltContents = () => {
                                   }}
                                   saturationHeight={100}
                                   saturationWidth={100}
-                                  value={backgroundColor}
-                                  onDrag={onDragBackgroundColor}
+                                  value={textColor}
+                                  onDrag={onDragTextColor}
                                 />
                               </>
                             </ClickAwayListener>
