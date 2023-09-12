@@ -33,6 +33,8 @@ const AddPrebuiltContents = () => {
   const [description, setDescription] = useState("");
   const [destination, setDestination] = useState("");
 
+  const [errors, setErrors] = useState(null);
+
   const closeTextColorPicker = () => {
     setTextColorEnable(false);
   };
@@ -68,7 +70,16 @@ const AddPrebuiltContents = () => {
 
       navigate("/product/" + productId + "/pre-built/contents");
     } catch (error) {
-      console.log(error);
+      console.log(error.response.data.errors);
+
+      const thisErrors = {};
+      for (let i = 0; i < error.response.data.errors.length; i++) {
+        console.log(error.response.data.errors[i].key);
+        thisErrors[error.response.data.errors[i].key] =
+          error.response.data.errors[i].message;
+      }
+
+      setErrors(thisErrors);
     }
   };
 
@@ -131,6 +142,11 @@ const AddPrebuiltContents = () => {
                             </ClickAwayListener>
                           ) : null}
                         </div>
+                        {errors && (
+                          <small className="text-danger">
+                            {errors.textColor}
+                          </small>
+                        )}
                       </div>
                     </Col>
                     <Col md={2}>
@@ -150,6 +166,9 @@ const AddPrebuiltContents = () => {
                             );
                           })}
                       </select>
+                      {errors && (
+                        <small className="text-danger">{errors.icon}</small>
+                      )}
                     </Col>
                     <Col md={2}>
                       <Label>Text</Label>
@@ -159,6 +178,11 @@ const AddPrebuiltContents = () => {
                         onChange={(e) => setTextContent(e.target.value)}
                         value={textContent}
                       ></Input>
+                      {errors && (
+                        <small className="text-danger">
+                          {errors.textContent}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Description</Label>
@@ -168,6 +192,11 @@ const AddPrebuiltContents = () => {
                         onChange={(e) => setDescription(e.target.value)}
                         value={description}
                       ></Input>
+                      {errors && (
+                        <small className="text-danger">
+                          {errors.description}
+                        </small>
+                      )}
                     </Col>
                     <Col md={3}>
                       <Label>Destination</Label>
@@ -177,6 +206,11 @@ const AddPrebuiltContents = () => {
                         onChange={(e) => setDestination(e.target.value)}
                         value={destination}
                       ></Input>
+                      {errors && (
+                        <small className="text-danger">
+                          {errors.destination}
+                        </small>
+                      )}
                     </Col>
                   </Row>
                 </CardBody>
