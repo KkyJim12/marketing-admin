@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
-import icons from "./free-icon.json";
+import icons from "../../../../../assets/icons/free-icon.json";
 import {
   Row,
   Col,
