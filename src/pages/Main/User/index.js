@@ -84,9 +84,9 @@ const User = () => {
           fullName: fetchData[i].fullName,
           email: fetchData[i].email,
           phone: fetchData[i].phone,
-          lastLogin: moment(fetchData[i].lastLogin).format(
-            "DD/MM/YYYY | h:mm a"
-          ),
+          lastLogin: fetchData[i].lastLogin
+            ? moment(fetchData[i].lastLogin).format("DD/MM/YYYY | h:mm a")
+            : "-",
           manageProduct: <ManageProductButton id={fetchData[i].id} />,
           edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
