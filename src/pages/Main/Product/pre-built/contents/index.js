@@ -50,6 +50,12 @@ const PrebuiltContents = () => {
         width: 150,
       },
       {
+        label: "Class",
+        field: "class",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Delete",
         field: "delete",
         sort: "asc",
@@ -95,6 +101,7 @@ const PrebuiltContents = () => {
           description: fetchData[i].description,
           destination: fetchData[i].destination,
           icon: fetchData[i].icon,
+          class: fetchData[i].class,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
         clonedData.rows.push(newData);

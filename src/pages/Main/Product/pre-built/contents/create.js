@@ -33,6 +33,7 @@ const AddPrebuiltContents = () => {
   const [selectedIconValue, setSelectedIconValue] = useState("message");
   const [description, setDescription] = useState("");
   const [destination, setDestination] = useState("");
+  const [myClass, setMyClass] = useState("");
   const [selectedIconShow, setSelectedIconShow] = useState({
     label: "fas message",
     value: "fas message",
@@ -75,6 +76,7 @@ const AddPrebuiltContents = () => {
           icon: selectedIconPrefix + " " + selectedIconValue,
           description: description,
           destination: destination,
+          myClass: myClass,
         },
         { headers }
       );
@@ -187,7 +189,7 @@ const AddPrebuiltContents = () => {
                         </small>
                       )}
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                       <Label>Description</Label>
                       <Input
                         className="form-control"
@@ -201,7 +203,7 @@ const AddPrebuiltContents = () => {
                         </small>
                       )}
                     </Col>
-                    <Col md={3}>
+                    <Col md={2}>
                       <Label>Destination</Label>
                       <Input
                         className="form-control"
@@ -212,6 +214,20 @@ const AddPrebuiltContents = () => {
                       {errors && (
                         <small className="text-danger">
                           {errors.destination}
+                        </small>
+                      )}
+                    </Col>
+                    <Col md={2}>
+                      <Label>Class</Label>
+                      <Input
+                        className="form-control"
+                        placeholder="class"
+                        onChange={(e) => setMyClass(e.target.value)}
+                        value={myClass}
+                      ></Input>
+                      {errors && (
+                        <small className="text-danger">
+                          {errors.myClass}
                         </small>
                       )}
                     </Col>
