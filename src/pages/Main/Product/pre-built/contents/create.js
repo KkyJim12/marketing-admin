@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import "./datatables.scss";
 import ClickAwayListener from "react-click-away-listener";
+import Select from "react-select";
 
 const AddPrebuiltContents = () => {
   document.title = " Pre-built Contents | Marketing tool platform";
@@ -32,6 +33,11 @@ const AddPrebuiltContents = () => {
   const [selectedIconValue, setSelectedIconValue] = useState("message");
   const [description, setDescription] = useState("");
   const [destination, setDestination] = useState("");
+  const [selectedIconShow, setSelectedIconShow] = useState({
+    label: "fas message",
+    value: "fas message",
+  });
+  const [iconOptions, setIconOptions] = useState([]);
 
   const [errors, setErrors] = useState(null);
 
@@ -43,8 +49,15 @@ const AddPrebuiltContents = () => {
     setTextColor(color);
   };
 
+  useEffect(() => {
+    const options = [];
+    icons.data.map((icon) => options.push({ label: icon, value: icon }));
+    setIconOptions(options);
+  }, []);
+
   const handleSelectedIcon = (e) => {
-    const splitIcon = e.target.value.split(" ");
+    const splitIcon = e.value.split(" ");
+    setSelectedIconShow({ label: e.value, value: e.value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -151,21 +164,11 @@ const AddPrebuiltContents = () => {
                     </Col>
                     <Col md={2}>
                       <Label>Icon</Label>
-                      <select
-                        className="form-select"
-                        id="floatingSelectGrid"
-                        aria-label="Floating label select example"
-                        onChange={handleSelectedIcon}
-                      >
-                        {icons &&
-                          icons.data.map((icon, index) => {
-                            return (
-                              <option key={index} value={icon}>
-                                {icon}
-                              </option>
-                            );
-                          })}
-                      </select>
+                      <Select
+                        value={selectedIconShow}
+                        onChange={(e) => handleSelectedIcon(e)}
+                        options={iconOptions}
+                      />
                       {errors && (
                         <small className="text-danger">{errors.icon}</small>
                       )}

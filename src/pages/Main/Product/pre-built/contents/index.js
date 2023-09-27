@@ -20,8 +20,8 @@ const PrebuiltContents = () => {
         width: 150,
       },
       {
-        label: "Background Color",
-        field: "backgroundColor",
+        label: "Text Color",
+        field: "textColor",
         sort: "asc",
         width: 150,
       },
@@ -90,7 +90,7 @@ const PrebuiltContents = () => {
               fetchData[i].id.length - 5,
               fetchData[i].id.length - 1
             ),
-          backgroundColor: fetchData[i].backgroundColor,
+          textColor: fetchData[i].textColor,
           textContent: fetchData[i].textContent,
           description: fetchData[i].description,
           destination: fetchData[i].destination,

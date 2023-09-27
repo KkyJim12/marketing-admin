@@ -16,7 +16,8 @@ import {
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
-
+import Select from "react-select";
+ 
 const AddPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
 
@@ -49,6 +50,12 @@ const AddPrebuiltProduct = () => {
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
   const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [selectedIconShow, setSelectedIconShow] = useState({
+    label: "fas message",
+    value: "fas message",
+  });
+
+  const [iconOptions, setIconOptions] = useState([]);
 
   const buttonStyles = [
     "Rounded Button",
@@ -66,6 +73,12 @@ const AddPrebuiltProduct = () => {
     { id: 4, title: "Facebook", icon: "facebook" },
     { id: 5, title: "Youtube", icon: "youtube" },
   ];
+
+  useEffect(() => {
+    const options = [];
+    icons.data.map((icon) => options.push({ label: icon, value: icon }));
+    setIconOptions(options);
+  }, []);
 
   const handleUploadIcon = async (e) => {
     if (!e.target.files || e.target.files.length === 0) {
@@ -142,7 +155,8 @@ const AddPrebuiltProduct = () => {
   };
 
   const handleSelectedIcon = (e) => {
-    const splitIcon = e.target.value.split(" ");
+    const splitIcon = e.value.split(" ");
+    setSelectedIconShow({ label: e.value, value: e.value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -628,24 +642,11 @@ const AddPrebuiltProduct = () => {
                       <Col md={12}>
                         {iconInput === "font-awesome" ? (
                           <div className="form-floating mb-3">
-                            <select
-                              className="form-select"
-                              id="floatingSelectGrid"
-                              aria-label="Floating label select example"
-                              onChange={handleSelectedIcon}
-                            >
-                              {icons &&
-                                icons.data.map((icon, index) => {
-                                  return (
-                                    <option key={index} value={icon}>
-                                      {icon}
-                                    </option>
-                                  );
-                                })}
-                            </select>
-                            <label htmlFor="floatingSelectGrid">
-                              Select Icon ({icons.data.length})
-                            </label>
+                            <Select
+                              value={selectedIconShow}
+                              onChange={(e) => handleSelectedIcon(e)}
+                              options={iconOptions}
+                            />
                           </div>
                         ) : (
                           <div className="form-floating mb-3">
