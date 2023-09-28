@@ -28,6 +28,10 @@ const SettingPage = () => {
 
   const [orderHistoryContent, setOrderHistoryContent] = useState();
 
+  const [buttonSettingContent, setButtonSettingContent] = useState();
+
+  const [websiteSetupContent, setWebsiteSetupContent] = useState();
+
   const [restError, setRestError] = useState("");
   const [saveSuccess, setSaveSuccess] = useState("");
 
@@ -79,6 +83,8 @@ const SettingPage = () => {
       setEcommerceContent(contents.eCommercePage);
       setMyProductContent(contents.myProductPage);
       setOrderHistoryContent(contents.orderHistoryPage);
+      setButtonSettingContent(contents.buttonSettingPage);
+      setWebsiteSetupContent(contents.websiteSetupPage);
     } catch (error) {
       console.log(error);
     }
@@ -101,6 +107,8 @@ const SettingPage = () => {
           eCommerceContent: eCommerceContent,
           myProductContent: myProductContent,
           orderHistoryContent: orderHistoryContent,
+          buttonSettingContent: buttonSettingContent,
+          websiteSetupContent: websiteSetupContent,
         },
         { headers }
       );
@@ -182,6 +190,42 @@ const SettingPage = () => {
                         theme="snow"
                         value={orderHistoryContent}
                         onChange={setOrderHistoryContent}
+                      />
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle>Button Setting</CardTitle>
+                  <Row className="gap-2">
+                    <Col style={{ height: 300 }} md={12}>
+                      <ReactQuill
+                        style={{ height: "80%" }}
+                        modules={modules}
+                        theme="snow"
+                        value={buttonSettingContent}
+                        onChange={setButtonSettingContent}
+                      />
+                    </Col>
+                  </Row>
+                </CardBody>
+              </Card>
+            </Col>
+            <Col md={12}>
+              <Card>
+                <CardBody>
+                  <CardTitle>Website Setup</CardTitle>
+                  <Row className="gap-2">
+                    <Col style={{ height: 300 }} md={12}>
+                      <ReactQuill
+                        style={{ height: "80%" }}
+                        modules={modules}
+                        theme="snow"
+                        value={websiteSetupContent}
+                        onChange={setWebsiteSetupContent}
                       />
                     </Col>
                   </Row>
