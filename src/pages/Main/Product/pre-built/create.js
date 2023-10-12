@@ -17,7 +17,7 @@ import {
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import Select from "react-select";
- 
+
 const AddPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
 
@@ -31,11 +31,11 @@ const AddPrebuiltProduct = () => {
   const [backgroundColor, setBackgroundColor] = useState("#3b82f6");
   const [bodyColor, setBodyColor] = useState("#ffffff");
   const [textColor, setTextColor] = useState("#f5f5f5");
-  const [buttonSize, setButtonSize] = useState(75);
+  const [buttonSize, setButtonSize] = useState(70);
 
   const [buttonPositionTop, setButtonPositionTop] = useState(null);
   const [buttonPositionRight, setButtonPositionRight] = useState(10);
-  const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
+  const [buttonPositionBottom, setButtonPositionBottom] = useState(10);
   const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
 
   const [iconInput, setIconInput] = useState("font-awesome");
@@ -73,6 +73,18 @@ const AddPrebuiltProduct = () => {
     { id: 4, title: "Facebook", icon: "facebook" },
     { id: 5, title: "Youtube", icon: "youtube" },
   ];
+
+  const getTextWidth = (text, font) => {
+    // re-use canvas object for better performance
+    const canvas =
+      getTextWidth.canvas ||
+      (getTextWidth.canvas = document.createElement("canvas"));
+    const context = canvas.getContext("2d");
+    context.font = font;
+    const metrics = context.measureText(text);
+    console.log(metrics.width);
+    return metrics.width;
+  };
 
   useEffect(() => {
     const options = [];
@@ -432,13 +444,13 @@ const AddPrebuiltProduct = () => {
                           Small
                         </button>
                         <button
-                          onClick={() => handleButtonSize(75)}
+                          onClick={() => handleButtonSize(70)}
                           className="btn btn-light"
                         >
                           Medium
                         </button>
                         <button
-                          onClick={() => handleButtonSize(100)}
+                          onClick={() => handleButtonSize(90)}
                           className="btn btn-light"
                         >
                           Large
@@ -779,7 +791,9 @@ const AddPrebuiltProduct = () => {
           >
             {selectedButtonStyle === "Rounded Button" ? (
               <div
-                style={{ float: "right" }}
+                style={{
+                  float: buttonPositionRight === null ? "left" : "right",
+                }}
                 className="d-flex gap-2 align-items-center"
               >
                 <button
@@ -788,6 +802,9 @@ const AddPrebuiltProduct = () => {
                   }
                   type="button"
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     width: buttonSize,
                     height: buttonSize,
                     borderRadius: "50%",
@@ -806,13 +823,17 @@ const AddPrebuiltProduct = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
@@ -832,6 +853,9 @@ const AddPrebuiltProduct = () => {
                   type="button"
                   className="d-flex justify-content-center align-items-center gap-3 px-4"
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     width: "100%",
                     height: buttonSize,
                     borderRadius: 9999,
@@ -847,13 +871,17 @@ const AddPrebuiltProduct = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
@@ -878,7 +906,7 @@ const AddPrebuiltProduct = () => {
                         "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
                     }}
                   >
-                    <h5>{buttonText}</h5>
+                    <h5 className="my-auto">{buttonText}</h5>
                   </div>
                 )}
                 <button
@@ -887,6 +915,9 @@ const AddPrebuiltProduct = () => {
                   }
                   type="button"
                   style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
                     width: buttonSize,
                     height: buttonSize,
                     borderRadius: "50%",
@@ -905,23 +936,49 @@ const AddPrebuiltProduct = () => {
                   {iconInput === "upload" && previewUploadedIcon ? (
                     <img
                       style={{
-                        width: 35,
-                        height: 35,
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
                       }}
                       src={previewUploadedIcon}
                     />
                   ) : (
                     <FontAwesomeIcon
+                      style={{
+                        width: buttonSize / 2,
+                        height: buttonSize / 2,
+                      }}
                       icon={[selectedIconPrefix, selectedIconValue]}
                     />
                   )}
                 </button>
-                {buttonPositionLeft && <h5>{buttonText}</h5>}
+                {buttonPositionLeft && (
+                  <div
+                    className="px-3 py-2 d-flex justify-content-center align-items-center"
+                    style={{
+                      background: "white",
+                      borderRadius: 10,
+                      boxShadow:
+                        "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    }}
+                  >
+                    <h5 className="my-auto">{buttonText}</h5>
+                  </div>
+                )}
               </div>
             ) : (
               <div
                 style={{
-                  float: buttonPositionRight === null ? "left" : "right",
+                  float: "right",
+                  position: buttonPositionLeft && "relative",
+                  left:
+                    buttonPositionLeft &&
+                    buttonSize / 2.8 +
+                      getTextWidth(buttonText) *
+                        (buttonSize === 90
+                          ? 2.2
+                          : buttonSize === 70
+                          ? 2.2
+                          : 2.5),
                 }}
                 className="d-flex gap-2 align-items-center"
               >
@@ -930,10 +987,11 @@ const AddPrebuiltProduct = () => {
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
-                  className="d-flex justify-content-center align-items-center gap-3 px-2"
+                  className="d-flex align-items-center gap-3"
                   style={{
-                    width: "100%",
-                    height: buttonSize,
+                    paddingLeft: 20,
+                    paddingRight: buttonSize,
+                    height: buttonSize - 10,
                     borderRadius: 9999,
                     border: 0,
                     boxShadow:
@@ -954,22 +1012,28 @@ const AddPrebuiltProduct = () => {
                   <div
                     className="d-flex align-items-center justify-content-center"
                     style={{
+                      position: "absolute",
+                      right: 3 + (buttonPositionRight ? 10 : 0),
                       background: backgroundColor,
-                      width: buttonSize * 0.9,
-                      height: buttonSize * 0.9,
+                      width: (buttonSize - 10) * 0.95,
+                      height: (buttonSize - 10) * 0.95,
                       borderRadius: "50%",
                     }}
                   >
                     {iconInput === "upload" && previewUploadedIcon ? (
                       <img
                         style={{
-                          width: 35,
-                          height: 35,
+                          width: buttonSize / 2.5,
+                          height: buttonSize / 2.5,
                         }}
                         src={previewUploadedIcon}
                       />
                     ) : (
                       <FontAwesomeIcon
+                        style={{
+                          width: buttonSize / 2.5,
+                          height: buttonSize / 2.5,
+                        }}
                         icon={[selectedIconPrefix, selectedIconValue]}
                       />
                     )}
@@ -981,12 +1045,24 @@ const AddPrebuiltProduct = () => {
               <div
                 style={{
                   position: "relative",
-                  top: buttonPositionTop ? 90 : null,
+                  top: buttonPositionTop
+                    ? buttonSize === 50
+                      ? 60
+                      : buttonSize === 70
+                      ? 80
+                      : 100
+                    : null,
                   left: buttonPositionLeft ? 0 : null,
                   bottom: buttonPositionBottom
                     ? 370 + contacts.length * 10
                     : null,
-                  right: buttonPositionRight ? 300 : null,
+                  right: buttonPositionRight
+                    ? buttonSize === 50
+                      ? 300 + 20
+                      : buttonSize === 70
+                      ? 280 + 20
+                      : 260 + 20
+                    : null,
                 }}
               >
                 <div
@@ -1015,61 +1091,59 @@ const AddPrebuiltProduct = () => {
                     {buttonText}
                   </div>
 
-                  <ClickAwayListener onClickAway={closeFloatingActionButton}>
-                    <div
-                      style={{
-                        marginRight: buttonPositionRight
-                          ? buttonPositionRight
-                          : null,
-                        background: bodyColor,
-                        cursor: "pointer",
-                        minHeight: 300,
-                        width: "100%",
-                        borderBottomLeftRadius: 15,
-                        borderBottomRightRadius: 15,
-                        color: "rgb(75 85 99)",
-                        fontWeight: 500,
-                        boxShadow:
-                          "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
-                      }}
-                    >
-                      {contacts.map((contact) => {
-                        return (
-                          <div
-                            key={contact.id}
+                  <div
+                    style={{
+                      marginRight: buttonPositionRight
+                        ? buttonPositionRight
+                        : null,
+                      background: bodyColor,
+                      cursor: "pointer",
+                      minHeight: 300,
+                      width: "100%",
+                      borderBottomLeftRadius: 15,
+                      borderBottomRightRadius: 15,
+                      color: "rgb(75 85 99)",
+                      fontWeight: 500,
+                      boxShadow:
+                        "0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)",
+                    }}
+                  >
+                    {contacts.map((contact) => {
+                      return (
+                        <div
+                          key={contact.id}
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            borderTop: "1px solid rgb(229 231 235)",
+                          }}
+                          className="py-3 px-4"
+                        >
+                          <i
                             style={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 10,
-                              borderTop: "1px solid rgb(229 231 235)",
+                              fontSize: 24,
                             }}
-                            className="py-3 px-4"
+                            className={"uil-" + contact.icon}
+                          ></i>
+                          <span
+                            style={{
+                              fontSize: 20,
+                            }}
                           >
-                            <i
-                              style={{
-                                fontSize: 24,
-                              }}
-                              className={"uil-" + contact.icon}
-                            ></i>
-                            <span
-                              style={{
-                                fontSize: 20,
-                              }}
-                            >
-                              {contact.title}
-                            </span>
-                            <i
-                              style={{
-                                fontSize: 24,
-                                marginLeft: "auto",
-                              }}
-                              className="uil-angle-right"
-                            ></i>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </ClickAwayListener>
+                            {contact.title}
+                          </span>
+                          <i
+                            style={{
+                              fontSize: 24,
+                              marginLeft: "auto",
+                            }}
+                            className="uil-angle-right"
+                          ></i>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
