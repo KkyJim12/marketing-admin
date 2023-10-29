@@ -16,10 +16,11 @@ import {
 } from "reactstrap";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
-import Select from "react-select";
+import Select, { components } from "react-select";
 
 const AddPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
+  const { Option } = components;
 
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -57,6 +58,21 @@ const AddPrebuiltProduct = () => {
 
   const [iconOptions, setIconOptions] = useState([]);
 
+  const OptionWithIcon = (props) => {
+    const { onIconSelect } = props.selectProps;
+    return (
+      <Option {...props}>
+        <div
+          onMouseDown={() => onIconSelect(props.data.value)}
+          className="d-flex gap-2 align-items-center"
+        >
+          <FontAwesomeIcon icon={props.data.value} />
+          {props.data.value}
+        </div>
+      </Option>
+    );
+  };
+
   const buttonStyles = [
     "Rounded Button",
     "Rounded Button With Text",
@@ -88,7 +104,12 @@ const AddPrebuiltProduct = () => {
 
   useEffect(() => {
     const options = [];
-    icons.data.map((icon) => options.push({ label: icon, value: icon }));
+    icons.data.map((icon) =>
+      options.push({
+        label: icon,
+        value: icon,
+      })
+    );
     setIconOptions(options);
   }, []);
 
@@ -166,9 +187,9 @@ const AddPrebuiltProduct = () => {
     }
   };
 
-  const handleSelectedIcon = (e) => {
-    const splitIcon = e.value.split(" ");
-    setSelectedIconShow({ label: e.value, value: e.value });
+  const handleSelectedIcon = (value) => {
+    const splitIcon = value.split(" ");
+    setSelectedIconShow({ label: value, value: value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -253,9 +274,9 @@ const AddPrebuiltProduct = () => {
                   <span>Button Styles</span>
                 </CardTitle>
                 <Row>
-                  {buttonStyles.map((buttonStyle) => {
+                  {buttonStyles.map((buttonStyle, index) => {
                     return (
-                      <Col md={2}>
+                      <Col md={2} key={index}>
                         <div className="d-flex flex-column gap-2">
                           <Label>{buttonStyle}</Label>
                           <Button
@@ -654,11 +675,32 @@ const AddPrebuiltProduct = () => {
                       <Col md={12}>
                         {iconInput === "font-awesome" ? (
                           <div className="form-floating mb-3">
-                            <Select
-                              value={selectedIconShow}
-                              onChange={(e) => handleSelectedIcon(e)}
-                              options={iconOptions}
-                            />
+                            <div className="d-flex gap-1 align-items-center">
+                              <div
+                                style={{
+                                  background: backgroundColor,
+                                  color: textColor,
+                                  width: 35,
+                                  height: 35,
+                                }}
+                                className="rounded d-flex align-items-center justify-content-center"
+                              >
+                                <FontAwesomeIcon
+                                  size="lg"
+                                  icon={[selectedIconPrefix, selectedIconValue]}
+                                />
+                              </div>
+                              <div className="w-100">
+                                <Select
+                                  value={selectedIconShow}
+                                  onIconSelect={(value) => {
+                                    handleSelectedIcon(value);
+                                  }}
+                                  options={iconOptions}
+                                  components={{ Option: OptionWithIcon }}
+                                />
+                              </div>
+                            </div>
                           </div>
                         ) : (
                           <div className="form-floating mb-3">
