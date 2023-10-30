@@ -3,6 +3,7 @@ import axios from "axios";
 import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import icons from "../../../../../assets/icons/free-icon.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   Row,
   Col,
@@ -18,10 +19,11 @@ import { useTranslation } from "react-i18next";
 import { useParams, useNavigate } from "react-router-dom";
 import "./datatables.scss";
 import ClickAwayListener from "react-click-away-listener";
-import Select from "react-select";
+import Select, { components } from "react-select";
 
 const AddPrebuiltContents = () => {
   document.title = " Pre-built Contents | Marketing tool platform";
+  const { Option } = components;
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { productId } = useParams();
@@ -50,15 +52,30 @@ const AddPrebuiltContents = () => {
     setTextColor(color);
   };
 
+  const OptionWithIcon = (props) => {
+    const { onIconSelect } = props.selectProps;
+    return (
+      <Option {...props}>
+        <div
+          onMouseDown={() => onIconSelect(props.data.value)}
+          className="d-flex gap-2 align-items-center"
+        >
+          <FontAwesomeIcon icon={props.data.value} />
+          {props.data.value}
+        </div>
+      </Option>
+    );
+  };
+
   useEffect(() => {
     const options = [];
     icons.data.map((icon) => options.push({ label: icon, value: icon }));
     setIconOptions(options);
   }, []);
 
-  const handleSelectedIcon = (e) => {
-    const splitIcon = e.value.split(" ");
-    setSelectedIconShow({ label: e.value, value: e.value });
+  const handleSelectedIcon = (value) => {
+    const splitIcon = value.split(" ");
+    setSelectedIconShow({ label: value, value: value });
     setSelectedIconPrefix(splitIcon[0]);
     setSelectedIconValue(splitIcon[1]);
   };
@@ -166,11 +183,34 @@ const AddPrebuiltContents = () => {
                     </Col>
                     <Col md={2}>
                       <Label>Icon</Label>
-                      <Select
-                        value={selectedIconShow}
-                        onChange={(e) => handleSelectedIcon(e)}
-                        options={iconOptions}
-                      />
+                      <div className="form-floating mb-3">
+                        <div className="d-flex gap-1 align-items-center">
+                          <div
+                            style={{
+                              background: "#5865f2",
+                              color: "white",
+                              width: 35,
+                              height: 35,
+                            }}
+                            className="rounded d-flex align-items-center justify-content-center p-2"
+                          >
+                            <FontAwesomeIcon
+                              size="lg"
+                              icon={[selectedIconPrefix, selectedIconValue]}
+                            />
+                          </div>
+                          <div className="w-100">
+                            <Select
+                              value={selectedIconShow}
+                              onIconSelect={(value) => {
+                                handleSelectedIcon(value);
+                              }}
+                              options={iconOptions}
+                              components={{ Option: OptionWithIcon }}
+                            />
+                          </div>
+                        </div>
+                      </div>
                       {errors && (
                         <small className="text-danger">{errors.icon}</small>
                       )}
@@ -226,9 +266,7 @@ const AddPrebuiltContents = () => {
                         value={myClass}
                       ></Input>
                       {errors && (
-                        <small className="text-danger">
-                          {errors.myClass}
-                        </small>
+                        <small className="text-danger">{errors.myClass}</small>
                       )}
                     </Col>
                   </Row>
