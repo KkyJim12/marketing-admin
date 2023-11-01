@@ -96,11 +96,11 @@ const AddPrebuiltProduct = () => {
     useState("Rounded Button");
 
   const contacts = [
-    { id: 1, title: "Email", icon: "fast-mail-alt" },
-    { id: 2, title: "Phone", icon: "phone" },
-    { id: 3, title: "Line", icon: "line" },
-    { id: 4, title: "Facebook", icon: "facebook" },
-    { id: 5, title: "Youtube", icon: "youtube" },
+    { id: 1, title: "Whatsapp", iconValue: "whatsapp" },
+    { id: 2, title: "Discord", iconValue: "discord" },
+    { id: 3, title: "Line", iconValue: "line" },
+    { id: 4, title: "Facebook", iconValue: "facebook" },
+    { id: 5, title: "Youtube", iconValue: "youtube" },
   ];
 
   const getTextWidth = (text, font) => {
@@ -1155,7 +1155,7 @@ const AddPrebuiltProduct = () => {
                     : null,
                   left: buttonPositionLeft ? 0 : null,
                   bottom: buttonPositionBottom
-                    ? 370 + contacts.length * 10
+                    ? 400 + contacts.length * 10
                     : null,
                   right: buttonPositionRight
                     ? buttonSize === 50
@@ -1214,33 +1214,50 @@ const AddPrebuiltProduct = () => {
                         <div
                           key={contact.id}
                           style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 10,
                             borderTop: "1px solid rgb(229 231 235)",
                           }}
                           className="py-3 px-4"
                         >
-                          <i
-                            style={{
-                              fontSize: 24,
-                            }}
-                            className={"uil-" + contact.icon}
-                          ></i>
-                          <span
-                            style={{
-                              fontSize: 20,
-                            }}
-                          >
-                            {contact.title}
-                          </span>
-                          <i
-                            style={{
-                              fontSize: 24,
-                              marginLeft: "auto",
-                            }}
-                            className="uil-angle-right"
-                          ></i>
+                          <div className="row">
+                            <div className="col-2">
+                              <div
+                                className="d-flex justify-content-center align-items-center h-100"
+                                style={{ fontSize: 24 }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={["fab", contact.iconValue]}
+                                />
+                              </div>
+                            </div>
+                            <div className="col-8">
+                              <div className="d-flex flex-column gap-1">
+                                <div
+                                  style={{
+                                    fontSize: 16,
+                                  }}
+                                >
+                                  {contact.title}
+                                </div>
+                                <div
+                                  style={{
+                                    fontSize: 10,
+                                  }}
+                                >
+                                  {contact.title}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="col-2">
+                              <div
+                                className="d-flex justify-content-center align-items-center h-100"
+                                style={{ fontSize: 24 }}
+                              >
+                                <FontAwesomeIcon
+                                  icon={["fas", "chevron-right"]}
+                                />
+                              </div>
+                            </div>
+                          </div>
                         </div>
                       );
                     })}
