@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import icons from "../../../../assets/icons/free-icon.json";
@@ -24,6 +24,9 @@ const AddPrebuiltProduct = () => {
 
   const { productId } = useParams();
   const navigate = useNavigate();
+
+  const [height, setHeight] = useState(null);
+  const [width, setWidth] = useState(null);
 
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
@@ -57,6 +60,16 @@ const AddPrebuiltProduct = () => {
   });
 
   const [iconOptions, setIconOptions] = useState([]);
+
+  const previewButton = useCallback(
+    (node) => {
+      if (node !== null) {
+        setHeight(node.getBoundingClientRect().height);
+        setWidth(node.getBoundingClientRect().width);
+      }
+    },
+    [buttonText, buttonSize]
+  );
 
   const OptionWithIcon = (props) => {
     const { onIconSelect } = props.selectProps;
@@ -838,12 +851,22 @@ const AddPrebuiltProduct = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   style={{
+                    zIndex: 99999,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -888,13 +911,25 @@ const AddPrebuiltProduct = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: width,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                    opacity: 0.4,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
+                  ref={previewButton}
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   className="d-flex justify-content-center align-items-center gap-3 px-4"
                   style={{
+                    zIndex: 99999,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -938,6 +973,17 @@ const AddPrebuiltProduct = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: buttonSize,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    zIndex: 99998,
+                    right: buttonPositionLeft === null && 10,
+                    left: buttonPositionRight === null && 10,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 {buttonPositionRight && (
                   <div
                     className="px-3 py-2 d-flex justify-content-center align-items-center"
@@ -957,6 +1003,7 @@ const AddPrebuiltProduct = () => {
                   }
                   type="button"
                   style={{
+                    zIndex: 99999,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -1024,13 +1071,25 @@ const AddPrebuiltProduct = () => {
                 }}
                 className="d-flex gap-2 align-items-center"
               >
+                <div
+                  style={{
+                    width: width,
+                    height: buttonSize,
+                    background: backgroundColor,
+                    opacity: 0.15,
+                    zIndex: 99998,
+                  }}
+                  id="fab-button-cover"
+                ></div>
                 <button
+                  ref={previewButton}
                   onClick={(e) =>
                     setFloatingActionButton(!floatingActionButton)
                   }
                   type="button"
                   className="d-flex align-items-center gap-3"
                   style={{
+                    zIndex: 99999,
                     paddingLeft: 20,
                     paddingRight: buttonSize,
                     height: buttonSize - 10,
