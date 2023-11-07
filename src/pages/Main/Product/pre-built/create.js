@@ -38,8 +38,8 @@ const AddPrebuiltProduct = () => {
   const [buttonSize, setButtonSize] = useState(70);
 
   const [buttonPositionTop, setButtonPositionTop] = useState(null);
-  const [buttonPositionRight, setButtonPositionRight] = useState(10);
-  const [buttonPositionBottom, setButtonPositionBottom] = useState(10);
+  const [buttonPositionRight, setButtonPositionRight] = useState(20);
+  const [buttonPositionBottom, setButtonPositionBottom] = useState(20);
   const [buttonPositionLeft, setButtonPositionLeft] = useState(null);
 
   const [iconInput, setIconInput] = useState("font-awesome");
@@ -52,11 +52,11 @@ const AddPrebuiltProduct = () => {
   const [uploadedIconUrl, setUploadedIconUrl] = useState("");
   const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
 
-  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fas");
-  const [selectedIconValue, setSelectedIconValue] = useState("message");
+  const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
+  const [selectedIconValue, setSelectedIconValue] = useState("facebook");
   const [selectedIconShow, setSelectedIconShow] = useState({
-    label: "fas message",
-    value: "fas message",
+    label: "fab facebook",
+    value: "fab facebook",
   });
 
   const [iconOptions, setIconOptions] = useState([]);
@@ -472,7 +472,7 @@ const AddPrebuiltProduct = () => {
                         aria-label="Basic example"
                       >
                         <button
-                          onClick={() => handleButtonSize(50)}
+                          onClick={() => handleButtonSize(60)}
                           className="btn btn-light"
                         >
                           Small
@@ -484,7 +484,7 @@ const AddPrebuiltProduct = () => {
                           Medium
                         </button>
                         <button
-                          onClick={() => handleButtonSize(90)}
+                          onClick={() => handleButtonSize(80)}
                           className="btn btn-light"
                         >
                           Large
@@ -1147,7 +1147,7 @@ const AddPrebuiltProduct = () => {
                 style={{
                   position: "relative",
                   top: buttonPositionTop
-                    ? buttonSize === 50
+                    ? buttonSize === 60
                       ? 60
                       : buttonSize === 70
                       ? 80
@@ -1158,11 +1158,11 @@ const AddPrebuiltProduct = () => {
                     ? 400 + contacts.length * 10
                     : null,
                   right: buttonPositionRight
-                    ? buttonSize === 50
-                      ? 300 + 20
+                    ? buttonSize === 60
+                      ? 290 + 20
                       : buttonSize === 70
                       ? 280 + 20
-                      : 260 + 20
+                      : 270 + 20
                     : null,
                 }}
               >
