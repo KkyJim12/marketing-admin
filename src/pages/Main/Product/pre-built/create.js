@@ -28,6 +28,9 @@ const AddPrebuiltProduct = () => {
   const [height, setHeight] = useState(null);
   const [width, setWidth] = useState(null);
 
+  const [errorName, setErrorName] = useState("");
+ 
+  const [name, setName] = useState("");
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [bodyColorEnable, setBodyColorEnable] = useState(false);
@@ -165,6 +168,13 @@ const AddPrebuiltProduct = () => {
   }, [uploadedIcon]);
 
   const createPrebuiltButton = async () => {
+    setErrorName("");
+
+    if (name === "") {
+      setErrorName("Please insert pre-built name");
+      return;
+    }
+
     try {
       const headers = {
         Authorization: localStorage.getItem("accessToken"),
@@ -172,6 +182,7 @@ const AddPrebuiltProduct = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-buttons`,
         {
+          name: name,
           buttonStyle: selectedButtonStyle,
           backgroundColor: backgroundColor,
           bodyColor: bodyColor,
@@ -235,6 +246,10 @@ const AddPrebuiltProduct = () => {
     setTextColor(color);
   };
 
+  const handleName = (e) => {
+    setName(e.target.value);
+  };
+
   const handleButtonText = (e) => {
     setButtonText(e.target.value);
   };
@@ -280,6 +295,30 @@ const AddPrebuiltProduct = () => {
     <React.Fragment>
       <div className="page-content">
         <Row>
+          <Col md={4}>
+            <Card>
+              <CardBody>
+                <CardTitle className="h4 mb-4">
+                  <span>Attribute</span>
+                </CardTitle>
+                <div>
+                  <Label>Name</Label>
+                  <div className="d-flex gap-2">
+                    <Input
+                      onChange={handleName}
+                      value={name}
+                      type="text"
+                      className="form-control"
+                      placeholder="Name"
+                    />
+                  </div>
+                  {errorName && (
+                    <small className="text-danger">{errorName}</small>
+                  )}
+                </div>
+              </CardBody>
+            </Card>
+          </Col>
           <Col md={12}>
             <Card>
               <CardBody>

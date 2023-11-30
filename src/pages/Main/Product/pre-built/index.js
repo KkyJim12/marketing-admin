@@ -20,6 +20,12 @@ const PrebuiltProduct = () => {
         width: 150,
       },
       {
+        label: "Name",
+        field: "name",
+        sort: "asc",
+        width: 150,
+      },
+      {
         label: "Background Color",
         field: "backgroundColor",
         sort: "asc",
@@ -113,13 +119,8 @@ const PrebuiltProduct = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id:
-            fetchData[i].id.substring(0, 4) +
-            "..." +
-            fetchData[i].id.substring(
-              fetchData[i].id.length - 5,
-              fetchData[i].id.length - 1
-            ),
+          id: fetchData[i].id,
+          name: fetchData[i].name,
           backgroundColor: fetchData[i].backgroundColor,
           bodyColor: fetchData[i].bodyColor,
           textColor: fetchData[i].textColor,

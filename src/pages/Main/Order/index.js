@@ -194,6 +194,12 @@ const OrderHistory = () => {
         width: 270,
       },
       {
+        label: "Email",
+        field: "userEmail",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "View",
         field: "view",
         sort: "asc",
@@ -245,18 +251,16 @@ const OrderHistory = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id:
-            fetchData[i].id.substring(0, 4) +
-            "..." +
-            fetchData[i].id.substring(
-              fetchData[i].id.length - 5,
-              fetchData[i].id.length - 1
-            ),
-          name: fetchData[i].name,
+          id: fetchData[i].id,
+          name:
+            fetchData[i].type === "Extends"
+              ? fetchData[i].product.name
+              : fetchData[i].name,
           type: fetchData[i].type,
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
           price: fetchData[i].price,
+          userEmail: fetchData[i].user.email,
           orderDate: moment(fetchData[i].createdAt).format(
             "DD/MM/YYYY, h:mm a"
           ),

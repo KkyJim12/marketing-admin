@@ -20,40 +20,16 @@ const PrebuiltContents = () => {
         width: 150,
       },
       {
-        label: "Text Color",
-        field: "textColor",
+        label: "Name",
+        field: "name",
         sort: "asc",
-        width: 150,
+        width: 270,
       },
       {
         label: "Icon",
         field: "icon",
         sort: "asc",
         width: 270,
-      },
-      {
-        label: "Text",
-        field: "textContent",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Description",
-        field: "description",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Destination",
-        field: "destination",
-        sort: "asc",
-        width: 150,
-      },
-      {
-        label: "Class",
-        field: "class",
-        sort: "asc",
-        width: 150,
       },
       {
         label: "Delete",
@@ -90,12 +66,8 @@ const PrebuiltContents = () => {
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
           id:
-            fetchData[i].id.substring(0, 4) +
-            "..." +
-            fetchData[i].id.substring(
-              fetchData[i].id.length - 5,
-              fetchData[i].id.length - 1
-            ),
+            fetchData[i].id,
+          name: fetchData[i].name,
           textColor: fetchData[i].textColor,
           textContent: fetchData[i].textContent,
           description: fetchData[i].description,

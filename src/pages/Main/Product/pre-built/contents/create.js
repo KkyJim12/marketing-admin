@@ -28,6 +28,11 @@ const AddPrebuiltContents = () => {
   const navigate = useNavigate();
   const { productId } = useParams();
 
+  const [width, setWidth] = useState(null);
+
+  const [errorName, setErrorName] = useState("");
+  const [name, setName] = useState("");
+
   const [textColorEnable, setTextColorEnable] = useState(false);
   const [textColor, setTextColor] = useState("#343a40");
   const [textContent, setTextContent] = useState("");
@@ -88,6 +93,7 @@ const AddPrebuiltContents = () => {
       const response = await axios.post(
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products/${productId}/prebuilt-contents`,
         {
+          name: name,
           textColor: textColor,
           textContent: textContent,
           icon: selectedIconPrefix + " " + selectedIconValue,
@@ -132,7 +138,19 @@ const AddPrebuiltContents = () => {
                     </div>
                   </CardTitle>
                   <Row>
-                    <Col md={2}>
+                    <Col className="mb-4" md={3}>
+                      <Label>Name</Label>
+                      <Input
+                        className="form-control"
+                        placeholder="Name"
+                        onChange={(e) => setName(e.target.value)}
+                        value={name}
+                      ></Input>
+                      {errors && (
+                        <small className="text-danger">{errors.name}</small>
+                      )}
+                    </Col>
+                    <Col md={3}>
                       <div>
                         <Label>Text color</Label>
                         <div className="d-flex gap-2">
@@ -181,7 +199,7 @@ const AddPrebuiltContents = () => {
                         )}
                       </div>
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Label>Icon</Label>
                       <div className="form-floating mb-3">
                         <div className="d-flex gap-1 align-items-center">
@@ -215,7 +233,7 @@ const AddPrebuiltContents = () => {
                         <small className="text-danger">{errors.icon}</small>
                       )}
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Label>Text</Label>
                       <Input
                         className="form-control"
@@ -229,7 +247,7 @@ const AddPrebuiltContents = () => {
                         </small>
                       )}
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Label>Description</Label>
                       <Input
                         className="form-control"
@@ -243,7 +261,7 @@ const AddPrebuiltContents = () => {
                         </small>
                       )}
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Label>Destination</Label>
                       <Input
                         className="form-control"
@@ -257,11 +275,11 @@ const AddPrebuiltContents = () => {
                         </small>
                       )}
                     </Col>
-                    <Col md={2}>
+                    <Col md={3}>
                       <Label>Class</Label>
                       <Input
                         className="form-control"
-                        placeholder="class"
+                        placeholder="Class"
                         onChange={(e) => setMyClass(e.target.value)}
                         value={myClass}
                       ></Input>
