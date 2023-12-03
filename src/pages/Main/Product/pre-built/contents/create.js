@@ -158,7 +158,8 @@ const AddPrebuiltContents = () => {
                             type="text"
                             className="colorpicker-default"
                             value={textColor}
-                            readOnly
+                            onChange={(e) => setTextColor(e.target.value)}
+                            maxLength={7}
                           />
                           <div
                             onClick={() => {
@@ -166,6 +167,7 @@ const AddPrebuiltContents = () => {
                             }}
                             className="btn"
                             style={{
+                              border: "1px rgb(206, 212, 218) solid",
                               backgroundColor: textColor,
                               width: 40,
                               height: 40,

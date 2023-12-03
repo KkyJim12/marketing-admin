@@ -29,7 +29,7 @@ const AddPrebuiltProduct = () => {
   const [width, setWidth] = useState(null);
 
   const [errorName, setErrorName] = useState("");
- 
+
   const [name, setName] = useState("");
   const [buttonText, setButtonText] = useState("Minible");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
@@ -368,7 +368,8 @@ const AddPrebuiltProduct = () => {
                           type="text"
                           className="colorpicker-default"
                           value={backgroundColor}
-                          readOnly
+                          onChange={(e) => setBackgroundColor(e.target.value)}
+                          maxLength={7}
                         />
                         <div
                           onClick={() => {
@@ -376,6 +377,7 @@ const AddPrebuiltProduct = () => {
                           }}
                           className="btn"
                           style={{
+                            border: "1px rgb(206, 212, 218) solid",
                             backgroundColor: backgroundColor,
                             width: 40,
                             height: 40,
@@ -412,7 +414,8 @@ const AddPrebuiltProduct = () => {
                           type="text"
                           className="colorpicker-default"
                           value={bodyColor}
-                          readOnly
+                          onChange={(e) => setBodyColor(e.target.value)}
+                          maxLength={7}
                         />
                         <div
                           onClick={() => {
@@ -420,6 +423,7 @@ const AddPrebuiltProduct = () => {
                           }}
                           className="btn"
                           style={{
+                            border: "1px rgb(206, 212, 218) solid",
                             backgroundColor: bodyColor,
                             width: 40,
                             height: 40,
@@ -454,7 +458,8 @@ const AddPrebuiltProduct = () => {
                           type="text"
                           className="colorpicker-default"
                           value={textColor}
-                          readOnly
+                          onChange={(e) => setTextColor(e.target.value)}
+                          maxLength={7}
                         />
                         <div
                           onClick={() => {
@@ -462,6 +467,7 @@ const AddPrebuiltProduct = () => {
                           }}
                           className="btn"
                           style={{
+                            border: "1px rgb(206, 212, 218) solid",
                             backgroundColor: textColor,
                             width: 40,
                             height: 40,
