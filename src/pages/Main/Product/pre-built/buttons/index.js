@@ -86,6 +86,12 @@ const PrebuiltProduct = () => {
         width: 270,
       },
       {
+        label: "Edit",
+        field: "edit",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Delete",
         field: "delete",
         sort: "asc",
@@ -144,6 +150,7 @@ const PrebuiltProduct = () => {
             ) : (
               fetchData[i].icon
             ),
+          edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
         clonedData.rows.push(newData);
@@ -163,6 +170,18 @@ const PrebuiltProduct = () => {
         type="button"
       >
         {t("Add Pre-built")}
+      </Link>
+    );
+  };
+
+  const EditButton = (props) => {
+    return (
+      <Link
+        to={"/product/" + productId + "/pre-built/button/" + props.id + "/edit"}
+        className="btn btn-warning waves-effect waves-light btn-sm"
+        type="button"
+      >
+        {t("Edit")}
       </Link>
     );
   };

@@ -12,10 +12,11 @@ import ManageProduct from "../pages/Main/User/manage-product";
 import Page from "../pages/Main/Page/index";
 import CreateProduct from "../pages/Main/Product/create";
 import EditProduct from "../pages/Main/Product/edit";
-import PrebuiltProduct from "../pages/Main/Product/pre-built/index";
+import PrebuiltProduct from "../pages/Main/Product/pre-built/buttons/index";
 import PrebuiltContents from "../pages/Main/Product/pre-built/contents/index";
+import AddPreBuiltProduct from "../pages/Main/Product/pre-built/buttons/create";
 import AddPrebuiltContents from "../pages/Main/Product/pre-built/contents/create";
-import AddPreBuiltProduct from "../pages/Main/Product/pre-built/create";
+import EditPreBuiltProduct from "../pages/Main/Product/pre-built/buttons/edit";
 import CreatePage from "../pages/Main/Page/create";
 import EditPage from "../pages/Main/Page/edit";
 import SubPage from "../pages/Main/SubPage/index";
@@ -70,14 +71,19 @@ const userRoutes = [
     component: <PrebuiltContents />,
   },
   {
+    path: "/product/:productId/pre-built/button/create",
+    exact: true,
+    component: <AddPreBuiltProduct />,
+  },
+  {
     path: "/product/:productId/pre-built/contents/create",
     exact: true,
     component: <AddPrebuiltContents />,
   },
   {
-    path: "/product/:productId/pre-built/button/create",
+    path: "/product/:productId/pre-built/button/:id/edit",
     exact: true,
-    component: <AddPreBuiltProduct />,
+    component: <EditPreBuiltProduct />,
   },
   {
     path: "/product/:id/edit",
