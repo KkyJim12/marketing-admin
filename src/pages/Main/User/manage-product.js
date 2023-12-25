@@ -22,6 +22,7 @@ const ManageProduct = () => {
   const { t } = useTranslation();
   const { id } = useParams();
 
+  const [days, setDays] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
   const revokeProduct = async (userProductId) => {
@@ -38,6 +39,34 @@ const ManageProduct = () => {
     } catch (error) {
       console.log(error);
     }
+  };
+
+  const extendProduct = async (userProductId) => {
+    try {
+      const headers = {
+        Authorization: localStorage.getItem("accessToken"),
+      };
+      const response = await axios.put(
+        `${process.env.REACT_APP_API_URL}/api/v1/admin/users/${userProductId}/extend`,
+        {},
+        { headers }
+      );
+      setIsLoading(true);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const ExtendButton = (props) => {
+    return (
+      <Button
+        onClick={() => extendProduct(props.userProductId)}
+        className="btn btn-success waves-effect waves-light "
+        type="button"
+      >
+        {t("Extend")}
+      </Button>
+    );
   };
 
   const RevokeButton = (props) => {
@@ -88,6 +117,12 @@ const ManageProduct = () => {
       {
         label: "Status",
         field: "status",
+        sort: "asc",
+        width: 270,
+      },
+      {
+        label: "Extend",
+        field: "extend",
         sort: "asc",
         width: 270,
       },
@@ -149,8 +184,19 @@ const ManageProduct = () => {
           type: fetchData[i].type,
           domains: fetchData[i].domains,
           duration: fetchData[i].duration,
-          remainingDays: moment(fetchData[i].endDate).fromNow(),
+          remainingDays:
+            moment(fetchData[i].endDate).diff(fetchData[i].startDate, "days") >
+            0
+              ? moment(fetchData[i].endDate).fromNow() +
+                " (" +
+                moment(fetchData[i].endDate).diff(
+                  fetchData[i].startDate,
+                  "days"
+                ) +
+                ")"
+              : "-",
           status: fetchData[i].status,
+          extend: <ExtendButton userProductId={fetchData[i].id} />,
           revoke:
             fetchData[i].status === "On going" ? (
               <RevokeButton userProductId={fetchData[i].id} />
