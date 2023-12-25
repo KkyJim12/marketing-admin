@@ -18,7 +18,7 @@ import ColorPicker from "@vtaits/react-color-picker";
 import "@vtaits/react-color-picker/dist/index.css";
 import Select, { components } from "react-select";
 
-const AddPrebuiltProduct = () => {
+const EditPrebuiltProduct = () => {
   document.title = " My Product | Marketing tool platform";
   const { Option } = components;
 
@@ -1362,4 +1362,4 @@ const AddPrebuiltProduct = () => {
   );
 };
 
-export default AddPrebuiltProduct;
+export default EditPrebuiltProduct;

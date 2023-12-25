@@ -32,6 +32,12 @@ const PrebuiltContents = () => {
         width: 270,
       },
       {
+        label: "Edit",
+        field: "edit",
+        sort: "asc",
+        width: 270,
+      },
+      {
         label: "Delete",
         field: "delete",
         sort: "asc",
@@ -65,8 +71,7 @@ const PrebuiltContents = () => {
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
-          id:
-            fetchData[i].id,
+          id: fetchData[i].id,
           name: fetchData[i].name,
           textColor: fetchData[i].textColor,
           textContent: fetchData[i].textContent,
@@ -74,6 +79,7 @@ const PrebuiltContents = () => {
           destination: fetchData[i].destination,
           icon: fetchData[i].icon,
           class: fetchData[i].class,
+          edit: <EditButton id={fetchData[i].id} />,
           delete: <DeleteButton id={fetchData[i].id} />,
         };
         clonedData.rows.push(newData);
@@ -93,6 +99,17 @@ const PrebuiltContents = () => {
         type="button"
       >
         {t("Add Pre-built Contents")}
+      </Link>
+    );
+  };
+
+  const EditButton = (props) => {
+    return (
+      <Link
+        to={`/product/${productId}/pre-built/contents/${props.id}/edit`}
+        className="btn btn-warning waves-effect waves-light btn-sm"
+      >
+        {t("Edit")}
       </Link>
     );
   };
