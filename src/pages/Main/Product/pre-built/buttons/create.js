@@ -56,10 +56,10 @@ const AddPrebuiltProduct = () => {
   const [previewUploadedIcon, setPreviewUploadedIcon] = useState("");
 
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
-  const [selectedIconValue, setSelectedIconValue] = useState("facebook");
+  const [selectedIconValue, setSelectedIconValue] = useState("fa-facebook");
   const [selectedIconShow, setSelectedIconShow] = useState({
-    label: "fab facebook",
-    value: "fab facebook",
+    label: "fab fa-facebook",
+    value: "fab fa-facebook",
   });
 
   const [iconOptions, setIconOptions] = useState([]);

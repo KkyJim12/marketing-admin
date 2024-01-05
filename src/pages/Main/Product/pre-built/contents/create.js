@@ -37,13 +37,13 @@ const AddPrebuiltContents = () => {
   const [textColor, setTextColor] = useState("#343a40");
   const [textContent, setTextContent] = useState("");
   const [selectedIconPrefix, setSelectedIconPrefix] = useState("fab");
-  const [selectedIconValue, setSelectedIconValue] = useState("facebook");
+  const [selectedIconValue, setSelectedIconValue] = useState("fa-facebook");
   const [description, setDescription] = useState("");
   const [destination, setDestination] = useState("");
   const [myClass, setMyClass] = useState("");
   const [selectedIconShow, setSelectedIconShow] = useState({
-    label: "fab facebook",
-    value: "fab facebook",
+    label: "fab fa-facebook",
+    value: "fab fa-facebook",
   });
   const [iconOptions, setIconOptions] = useState([]);
 
