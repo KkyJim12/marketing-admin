@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom";
 const Authmiddleware = (props) => {
   const navigate = useNavigate();
 
-  const payload = localStorage.getItem("accessToken").split(".")[1];
-  const decoded = atob(payload);
-  const expTime = JSON.parse(decoded).exp;
-  const now = new Date();
-
   if (
     !localStorage.getItem("authUser") ||
     !localStorage.getItem("accessToken") ||
@@ -16,6 +11,18 @@ const Authmiddleware = (props) => {
   ) {
     navigate("/login");
   }
+
+  if (localStorage.getItem("accessToken")) {
+    const payload = localStorage.getItem("accessToken").split(".")[1];
+    const decoded = atob(payload);
+    const expTime = JSON.parse(decoded).exp;
+    const now = new Date();
+
+    if (now > expTime) {
+      navigate("/login");
+    }
+  }
+
   return <React.Fragment>{props.children}</React.Fragment>;
 };
 
