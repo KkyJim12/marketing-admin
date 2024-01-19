@@ -6,7 +6,7 @@ const Authmiddleware = (props) => {
 
   if (
     !localStorage.getItem("authUser") ||
-    !localStorage.getItem("accessToken") ||
+    !localStorage.getItem("accessToken")
   ) {
     navigate("/login");
   }
