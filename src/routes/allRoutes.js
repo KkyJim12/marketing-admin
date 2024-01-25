@@ -27,11 +27,6 @@ import SettingPage from "../pages/Main/Setting/index";
 
 const userRoutes = [
   {
-    path: "/",
-    exact: true,
-    component: <Navigate to="/user" />,
-  },
-  {
     path: "/user",
     exact: true,
     component: <User />,
@@ -140,6 +135,6 @@ const userRoutes = [
   { path: "*", component: <Navigate to="/login" /> },
 ];
 
-const authRoutes = [{ path: "/login", component: <Login /> }];
+const authRoutes = [{ path: "/", component: <Login /> }];
 
 export { userRoutes, authRoutes };
