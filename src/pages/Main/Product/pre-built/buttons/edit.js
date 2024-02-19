@@ -31,7 +31,7 @@ const EditPrebuiltProduct = () => {
   const [errorName, setErrorName] = useState("");
 
   const [name, setName] = useState("");
-  const [buttonText, setButtonText] = useState("Minible");
+  const [buttonText, setButtonText] = useState("ติดต่อเรา");
   const [backgroundColorEnable, setBackgroundColorEnable] = useState(false);
   const [bodyColorEnable, setBodyColorEnable] = useState(false);
   const [textColorEnable, setTextColorEnable] = useState(false);
