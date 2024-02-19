@@ -294,7 +294,7 @@ const EditPage = () => {
                             {icons &&
                               icons.data.map((icon, index) => {
                                 return (
-                                  <option key={index} value={icon}>
+                                  <option key={index} value={"uil-" + icon}>
                                     {icon}
                                   </option>
                                 );
