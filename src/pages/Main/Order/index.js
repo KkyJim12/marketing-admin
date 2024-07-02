@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import "./datatables.scss";
 
 const OrderHistory = () => {
-  document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
 
   const ViewButton = (props) => {

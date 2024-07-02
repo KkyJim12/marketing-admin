@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import "./datatables.scss";
 
 const Page = () => {
-  document.title = " Page | Marketing tool platform";
   const { t } = useTranslation();
   const initData = {
     columns: [

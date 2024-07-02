@@ -8,7 +8,6 @@ import "./datatables.scss";
 import moment from "moment";
 
 const User = () => {
-  document.title = " User | Marketing tool platform";
   const { t } = useTranslation();
   const initData = {
     columns: [

@@ -19,7 +19,6 @@ import "@vtaits/react-color-picker/dist/index.css";
 import Select, { components } from "react-select";
 
 const EditPrebuiltProduct = () => {
-  document.title = " My Product | Marketing tool platform";
   const { Option } = components;
 
   const { productId, id } = useParams();

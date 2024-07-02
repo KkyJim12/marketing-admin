@@ -7,7 +7,6 @@ import { Link, useParams } from "react-router-dom";
 import "./datatables.scss";
 
 const PrebuiltContents = () => {
-  document.title = " Pre-built Contents | Marketing tool platform";
   const { t } = useTranslation();
   const { productId } = useParams();
 

@@ -102,7 +102,6 @@ const SubPage = () => {
     rows: [],
   };
 
-  document.title = " Page | Marketing tool platform";
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);
