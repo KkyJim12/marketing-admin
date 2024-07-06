@@ -294,7 +294,7 @@ const CreatePage = () => {
                       </Col>
 
                       <Col className="gap-2 d-grid" md={12}>
-                        <button className="btn btn-success mt-3" type="submit">
+                        <button className="btn btn-primary mt-3" type="submit">
                           Create Page
                         </button>
                       </Col>

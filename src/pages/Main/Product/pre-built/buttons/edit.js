@@ -380,7 +380,7 @@ const EditPrebuiltProduct = () => {
                             type="button"
                             className={
                               buttonStyle === selectedButtonStyle
-                                ? "btn btn-success"
+                                ? "btn btn-primary"
                                 : "btn btn-info"
                             }
                           >

@@ -39,7 +39,7 @@ const OrderHistory = () => {
       return (
         <button
           onClick={() => acceptOrder(props.id)}
-          className="btn btn-success waves-effect waves-light btn-sm "
+          className="btn btn-primary waves-effect waves-light btn-sm "
           type="button"
         >
           {t("Accept")}

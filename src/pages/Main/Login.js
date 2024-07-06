@@ -100,7 +100,7 @@ const Login = () => {
               <Card>
                 <CardBody className="p-4">
                   <div className="text-center mt-2">
-                    <h5 className="text-primary">Sign In</h5>
+                    <h5 style={{ color: "#0D1727"}}>Sign In</h5>
                     <p className="text-muted">
                       Start boosting your campaign performance!
                     </p>

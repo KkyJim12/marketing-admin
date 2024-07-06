@@ -299,7 +299,7 @@ const AddPrebuiltContents = () => {
                 <Button
                   onClick={createPrebuiltContent}
                   type="button"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                 >
                   Create Pre-built Contents
                 </Button>
