@@ -148,18 +148,33 @@ const Login = () => {
                           Sign In
                         </Button>
                       </div>
+                      <div className="mt-4 text-center">
+                        <p className="mb-0">
+                          By signing in, you agree to our{" "}
+                          <a
+                            href="https://pacymedia.com/terms-pacy-pilot"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Term & Conditions.
+                          </a>
+                        </p>
+                      </div>
                     </Form>
                   </div>
                 </CardBody>
               </Card>
               <div className="mt-5 text-center">
                 <p>
-                  By signing in, you agree to our <a href="https://pacymedia.com/terms-pacy-pilot">Term & Conditions.</a>
-                </p>
-              </div>
-              <div className=" text-center">
-                <p>
-                  © {new Date().getFullYear()} pacypilot.com by <a href="https://pacymedia.com">Pacy Media.</a> All rights reserved
+                  © {new Date().getFullYear()} pacypilot.com by{" "}
+                  <a
+                    href="https://pacymedia.com" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Pacy Media.
+                  </a>{" "}
+                  All rights reserved
                 </p>
               </div>
             </Col>
