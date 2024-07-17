@@ -61,7 +61,7 @@ const ManageProduct = () => {
     return (
       <Button
         onClick={() => extendProduct(props.userProductId)}
-        className="btn btn-success waves-effect waves-light "
+        className="btn btn-primary waves-effect waves-light "
         type="button"
       >
         {t("Extend")}
@@ -294,7 +294,7 @@ const ManageProduct = () => {
                     <Col className="gap-2 d-grid" md={12}>
                       <button
                         onClick={addProductToUser}
-                        className="btn btn-success mt-3"
+                        className="btn btn-primary mt-3"
                         type="button"
                       >
                         Confirm

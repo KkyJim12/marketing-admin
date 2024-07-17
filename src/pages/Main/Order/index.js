@@ -16,7 +16,6 @@ import { useTranslation } from "react-i18next";
 import "./datatables.scss";
 
 const OrderHistory = () => {
-  document.title = " Order History | Marketing tool platform";
   const { t } = useTranslation();
 
   const ViewButton = (props) => {
@@ -40,7 +39,7 @@ const OrderHistory = () => {
       return (
         <button
           onClick={() => acceptOrder(props.id)}
-          className="btn btn-success waves-effect waves-light btn-sm "
+          className="btn btn-primary waves-effect waves-light btn-sm "
           type="button"
         >
           {t("Accept")}

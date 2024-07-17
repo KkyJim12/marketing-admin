@@ -19,7 +19,6 @@ import "@vtaits/react-color-picker/dist/index.css";
 import Select, { components } from "react-select";
 
 const AddPrebuiltProduct = () => {
-  document.title = " My Product | Marketing tool platform";
   const { Option } = components;
 
   const { productId } = useParams();
@@ -336,7 +335,7 @@ const AddPrebuiltProduct = () => {
                             type="button"
                             className={
                               buttonStyle === selectedButtonStyle
-                                ? "btn btn-success"
+                                ? "btn btn-primary"
                                 : "btn btn-info"
                             }
                           >
@@ -869,7 +868,7 @@ const AddPrebuiltProduct = () => {
                   <Button
                     onClick={createPrebuiltButton}
                     type="button"
-                    className="btn btn-success"
+                    className="btn btn-primary"
                   >
                     Create Pre-built Button
                   </Button>

@@ -12,7 +12,7 @@ const SubPage = () => {
     return (
       <Link
         to="/sub-page/create"
-        className="btn btn-success waves-effect waves-light "
+        className="btn btn-primary waves-effect waves-light "
         type="button"
       >
         {t("Add Sub Page")}
@@ -102,7 +102,6 @@ const SubPage = () => {
     rows: [],
   };
 
-  document.title = " Page | Marketing tool platform";
   const { t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(true);

@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import "./datatables.scss";
 
 const Product = () => {
-  document.title = " Product | Marketing tool platform";
   const { t } = useTranslation();
 
   const initData = {
@@ -153,7 +152,7 @@ const Product = () => {
     return (
       <Link
         to="/product/create"
-        className="btn btn-success waves-effect waves-light "
+        className="btn btn-primary waves-effect waves-light "
         type="button"
       >
         {t("Add Product")}

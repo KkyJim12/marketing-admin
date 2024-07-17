@@ -22,7 +22,6 @@ import ClickAwayListener from "react-click-away-listener";
 import Select, { components } from "react-select";
 
 const AddPrebuiltContents = () => {
-  document.title = " Pre-built Contents | Marketing tool platform";
   const { Option } = components;
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -300,7 +299,7 @@ const AddPrebuiltContents = () => {
                 <Button
                   onClick={createPrebuiltContent}
                   type="button"
-                  className="btn btn-success"
+                  className="btn btn-primary"
                 >
                   Create Pre-built Contents
                 </Button>

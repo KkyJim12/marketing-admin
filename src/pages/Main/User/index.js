@@ -8,7 +8,6 @@ import "./datatables.scss";
 import moment from "moment";
 
 const User = () => {
-  document.title = " User | Marketing tool platform";
   const { t } = useTranslation();
   const initData = {
     columns: [
@@ -106,7 +105,7 @@ const User = () => {
     return (
       <Link
         to="/user/create"
-        className="btn btn-success waves-effect waves-light "
+        className="btn btn-primary waves-effect waves-light "
         type="button"
       >
         {t("Add User")}
