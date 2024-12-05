@@ -84,6 +84,7 @@ const ManageProduct = () => {
   const initData = {
     columns: [
       { label: "ID", field: "id", width: 150 },
+      { label: "White list domains", field: "whitelistDomains", width: 150 },
       {
         label: "Package Name",
         field: "packageName",
@@ -154,8 +155,6 @@ const ManageProduct = () => {
         `${process.env.REACT_APP_API_URL}/api/v1/admin/products`,
         { headers }
       );
-
-      console.log(response);
       setProducts(response.data.data);
     } catch (error) {
       console.log(error);
@@ -172,10 +171,10 @@ const ManageProduct = () => {
         { headers }
       );
 
-      console.log(response);
-
       const fetchData = response.data.data;
       const clonedData = initData;
+
+      console.log(fetchData)
 
       for (let i = 0; i < fetchData.length; i++) {
         const newData = {
@@ -203,6 +202,7 @@ const ManageProduct = () => {
             ) : (
               "-"
             ),
+          whitelistDomains: fetchData[i].whitelistDomains
         };
         clonedData.rows.push(newData);
       }

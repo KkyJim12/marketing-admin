@@ -12,6 +12,8 @@ import {
   Form,
   Alert,
 } from "reactstrap";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const EditProduct = () => {
   const navigate = useNavigate();
@@ -24,6 +26,7 @@ const EditProduct = () => {
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [footerHtml, setFooterHtml] = useState("");
 
   const [nameError, setNameError] = useState("");
   const [typeError, setTypeError] = useState("");
@@ -32,6 +35,7 @@ const EditProduct = () => {
   const [priceError, setPriceError] = useState("");
   const [imageError, setImageError] = useState("");
   const [restError, setRestError] = useState("");
+  const [footerHtmlError, setFooterHtmlError] = useState("");
 
   const resetEditProductError = () => {
     setNameError("");
@@ -40,6 +44,7 @@ const EditProduct = () => {
     setDurationError("");
     setPriceError("");
     setImageError("");
+    setFooterHtmlError("");
   };
 
   useEffect(() => {
@@ -82,6 +87,7 @@ const EditProduct = () => {
       setDuration(product.duration);
       setPrice(product.price);
       setImageUrl(product.image);
+      setFooterHtml(product.footerHtml);
     } catch (error) {
       console.log(error);
     }
@@ -103,6 +109,7 @@ const EditProduct = () => {
           duration: duration,
           price: price,
           image: imageUrl,
+          footerHtml: footerHtml,
         },
         { headers }
       );
@@ -124,6 +131,8 @@ const EditProduct = () => {
             return setPriceError(error.message);
           } else if (error.key === "image") {
             return setImageError(error.message);
+          } else if (error.key === "footerHtml") {
+            return setFooterHtmlError(error.message);
           } else {
             return false;
           }
@@ -251,6 +260,40 @@ const EditProduct = () => {
                           />
                           {imageError && (
                             <small className="text-danger">{imageError}</small>
+                          )}
+                        </div>
+                      </Col>
+                      <Col md={12}>
+                        <Label className="col-md-2 col-form-Label">
+                          Footer
+                        </Label>
+                        <div>
+                          <ReactQuill 
+                            value={footerHtml} 
+                            onChange={setFooterHtml} 
+                            className="custom-quill"
+                            modules={{
+                              toolbar: [
+                                [{ header: [1, 2, false] }],
+                                ['bold', 'italic', 'underline'],
+                                [{ align: [] }], // เพิ่มส่วนจัดตำแหน่ง
+                                ['link', 'image'],
+                                ['clean'],
+                              ],
+                            }}
+                            formats={[
+                              'header', 
+                              'bold', 
+                              'italic', 
+                              'underline', 
+                              'align', // เพิ่ม align format
+                              'link', 
+                              'image', 
+                              'list',
+                            ]}
+                          />
+                          {footerHtmlError && (
+                            <small className="text-danger">{footerHtmlError}</small>
                           )}
                         </div>
                       </Col>
