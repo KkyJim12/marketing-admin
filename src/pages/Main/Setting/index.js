@@ -76,8 +76,6 @@ const SettingPage = () => {
         { headers }
       );
 
-      console.log(response);
-
       const contents = response.data.data;
 
       setEcommerceContent(contents.eCommercePage);

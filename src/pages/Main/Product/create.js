@@ -243,7 +243,6 @@ const CreateProduct = () => {
                             className="custom-quill"
                             modules={{
                               toolbar: [
-                                [{ header: [1, 2, false] }],
                                 ['bold', 'italic', 'underline'],
                                 [{ align: [] }], // เพิ่มส่วนจัดตำแหน่ง
                                 ['link', 'image'],
