@@ -14,6 +14,9 @@ import {
 } from "reactstrap";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Quill from "quill";
+import ImageResize from "quill-image-resize-module-react";
+Quill.register("modules/imageResize", ImageResize);
 
 const CreateProduct = () => {
   const navigate = useNavigate();
@@ -248,6 +251,10 @@ const CreateProduct = () => {
                                 ['link', 'image'],
                                 ['clean'],
                               ],
+                              imageResize: {
+                                parchment: Quill.import("parchment"),
+                                modules: ["Resize", "DisplaySize"],
+                              },
                             }}
                             formats={[
                               'header', 

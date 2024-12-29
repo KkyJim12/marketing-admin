@@ -43,7 +43,6 @@
     "mdbreact": "^5.2.0",
     "metismenujs": "^1.4.0",
     "moment": "^2.29.4",
-    "node-sass": "^8.0.0",
     "nouislider-react": "^3.4.1",
     "quill-image-resize-module-react": "^3.0.0",
     "react": "^18.2.0",
@@ -122,6 +121,11 @@
     ]
   },
   "devDependencies": {
-    "redux-devtools": "^3.7.0"
+    "css-loader": "^7.1.2",
+    "postcss-loader": "^8.1.1",
+    "redux-devtools": "^3.7.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.83.0",
+    "sass-loader": "^16.0.4"
   }
 }
