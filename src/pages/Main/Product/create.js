@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import {
@@ -38,6 +38,30 @@ const CreateProduct = () => {
   const [imageError, setImageError] = useState("");
   const [restError, setRestError] = useState("");
   const [footerHtmlError, setFooterHtmlError] = useState("");
+
+  const quillRef = useRef(null);
+
+  useEffect(() => {
+    if (quillRef.current && quillRef.current.getEditor) {
+      const editor = quillRef.current.getEditor();
+
+      const handleInput = () => {
+        const imgs = editor.root.querySelectorAll("img");
+        imgs.forEach((img) => {
+          img.style.display = "inline-block";
+          img.style.marginRight = "5px";
+          img.style.verticalAlign = "middle";
+        });
+      };
+  
+      // Attach the input event listener
+      editor.root.addEventListener("input", handleInput);
+  
+      return () => {
+        editor.root.removeEventListener("input", handleInput);
+      };
+    }
+  }, []);
 
   const resetCreateProductError = () => {
     setNameError("");

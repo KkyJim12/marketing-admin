@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -40,6 +40,8 @@ const EditProduct = () => {
   const [restError, setRestError] = useState("");
   const [footerHtmlError, setFooterHtmlError] = useState("");
 
+  const quillRef = useRef(null);
+
   const resetEditProductError = () => {
     setNameError("");
     setTypeError("");
@@ -51,7 +53,27 @@ const EditProduct = () => {
   };
 
   useEffect(() => {
-    getProduct(); // eslint-disable-next-line
+    getProduct();
+
+    if (quillRef.current && quillRef.current.getEditor) {
+      const editor = quillRef.current.getEditor();
+
+      const handleInput = () => {
+        const imgs = editor.root.querySelectorAll("img");
+        imgs.forEach((img) => {
+          img.style.display = "inline-block";
+          img.style.marginRight = "5px";
+          img.style.verticalAlign = "middle";
+        });
+      };
+  
+      // Attach the input event listener
+      editor.root.addEventListener("input", handleInput);
+  
+      return () => {
+        editor.root.removeEventListener("input", handleInput);
+      };
+    }
   }, []);
 
   const uploadImage = async (e) => {
